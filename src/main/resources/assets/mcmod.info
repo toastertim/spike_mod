@@ -1,0 +1,16 @@
+[
+{
+  "modid": "spikemod",
+  "name": "Spike Mod",
+  "description": "Toastertim's spike mod for 1.10.2, functionality ported due to lack of ExU spikes in ExU2",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["toastertim"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
