@@ -26,7 +26,7 @@ public class Config {
     }
 
     private static void initGenConfig(Configuration cfg) {
-        cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General configuration");
-        dropsXP = cfg.getBoolean(CATEGORY_GENERAL, "xpDrop", dropsXP, "Set to false for to change spike damage to not drop xp");
+        //cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General configuration");
+        //dropsXP = cfg.getBoolean(CATEGORY_GENERAL, "xpDrop", dropsXP, "Set to false for to change spike damage to not drop xp");
     }
 }

@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class SpikeMod
 {
     public static final String MODID = "spikemod";
-    public static final String VERSION = "1.0.2";
+    public static final String VERSION = "1.1";
     public static final String NAME = "Spike Mod";
 
     @SidedProxy(clientSide = "com.toastertim.spikemod.proxy.ClientProxy", serverSide = "com.toastertim.spikemod.proxy.CommonProxy")
