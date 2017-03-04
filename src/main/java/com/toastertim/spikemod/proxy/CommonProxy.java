@@ -17,7 +17,8 @@ public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event){
         File directory = event.getModConfigurationDirectory();
-        config = new Configuration(new File(directory.getPath(), "spikemod.cfg"));
+        File configFile = new File(directory.getPath(), "spikemod.cfg");
+        config = new Configuration(configFile);
         Config.readConfig();
     }
 
