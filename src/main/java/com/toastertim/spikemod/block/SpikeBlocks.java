@@ -9,6 +9,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import static com.toastertim.spikemod.Config.*;
+
 /**
  * Created by Tim on 10/6/2016.
  */
@@ -21,12 +23,12 @@ public class SpikeBlocks {
     public static Block lootingSpike;
 
     public static void preInit(){
-        woodenSpike = new BlockSpike("wooden_spike", 1.5F);
-        stoneSpike = new BlockSpike("stone_spike", 2.0F);
-        ironSpike = new BlockSpike("iron_spike", 2.5F);
-        goldSpike = new BlockSpike("golden_spike", 3.0F);
-        diamondSpike = new BlockSpike("diamond_spike", 3.5F);
-        lootingSpike = new LootingSpike("looting_spike", 4.0F);
+        woodenSpike = new BlockSpike("wooden_spike", woodenDamage);
+        stoneSpike = new BlockSpike("stone_spike", stoneDamage);
+        ironSpike = new BlockSpike("iron_spike", ironDamage);
+        goldSpike = new BlockSpike("golden_spike", goldDamage);
+        diamondSpike = new BlockSpike("diamond_spike", diamondDamage);
+        lootingSpike = new LootingSpike("looting_spike", lootingDamage);
         registerBlocks();
     }
 
