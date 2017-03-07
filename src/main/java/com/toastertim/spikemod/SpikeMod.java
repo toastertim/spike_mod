@@ -2,9 +2,11 @@ package com.toastertim.spikemod;
 
 import com.toastertim.spikemod.block.SpikeBlocks;
 import com.toastertim.spikemod.crafting.SpikeRecipes;
+import com.toastertim.spikemod.handler.ConfigEventHandler;
 import com.toastertim.spikemod.proxy.CommonProxy;
 import com.toastertim.spikemod.tab.SpikeTab;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -39,6 +41,8 @@ public class SpikeMod
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event){
+        Config.init(event.getSuggestedConfigurationFile());
+        MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
         logger = event.getModLog();
         spikeTab = new SpikeTab(CreativeTabs.getNextID(), "spike_tab");
         SpikeBlocks.preInit();

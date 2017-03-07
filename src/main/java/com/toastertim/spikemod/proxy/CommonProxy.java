@@ -17,16 +17,6 @@ public class CommonProxy {
     public static Configuration config;
 
     public void preInit(FMLPreInitializationEvent event){
-       /* Doesnt make config file
-        File directory = event.getModConfigurationDirectory();
-        File configFile = new File(directory.getPath(), "spikemod.cfg");
-        config = new Configuration(configFile);
-        Config.readConfig(); */
-
-       //Doesnt work either??
-        File configFile = new File(Loader.instance().getConfigDir(), "SpikeMod.cfg");
-        config = new Configuration(configFile);
-        Config.readConfig();
     }
 
     public void init(FMLInitializationEvent event){
