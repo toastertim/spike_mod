@@ -25,7 +25,6 @@ public class Config {
             initGenConfig(cfg);
         } catch (Exception e1) {
             SpikeMod.logger.log(Level.ERROR, "Problem loading config file!", e1);
-            System.out.println("Spikemod config error" + e1);
         } finally {
             if (cfg.hasChanged()) {
                 cfg.save();
