@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 public class SpikeMod
 {
     public static final String MODID = "spikemod";
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.11.2-1.2";
     public static final String NAME = "Spike Mod";
 
     @SidedProxy(clientSide = "com.toastertim.spikemod.proxy.ClientProxy", serverSide = "com.toastertim.spikemod.proxy.CommonProxy")

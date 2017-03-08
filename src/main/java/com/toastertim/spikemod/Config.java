@@ -37,13 +37,13 @@ public class Config {
     }
 
     public static void initConfig() {
-        dropsXP = cfg.getBoolean(CATEGORY_GENERAL, "xpDrop", dropsXP, "Set to false for to change spike damage to not drop xp, does not include looting spikes");
-        woodenDamage =cfg.getFloat("Wooden Spike Damage", CATEGORY_GENERAL, woodenDamage, 0.0F, 10.0F, "Change damage of wooden spike");
-        stoneDamage =cfg.getFloat("Stone Spike Damage", CATEGORY_GENERAL, stoneDamage, 0.0F, 10.0F, "Change damage of stone spike");
-        ironDamage =cfg.getFloat("Iron Spike Damage", CATEGORY_GENERAL, ironDamage, 0.0F, 10.0F, "Change damage of iron spike");
-        goldDamage =cfg.getFloat("Gold Spike Damage", CATEGORY_GENERAL, goldDamage, 0.0F, 10.0F, "Change damage of gold spike");
-        diamondDamage =cfg.getFloat("Diamond Spike Damage", CATEGORY_GENERAL, diamondDamage, 0.0F, 20.0F, "Change damage of diamond spike");
-        lootingDamage =cfg.getFloat("Looting Spike Damage", CATEGORY_GENERAL, lootingDamage, 0.0F, 10.0F, "Change damage of looting spike");
+        dropsXP = cfg.getBoolean("Do XP Drop", CATEGORY_GENERAL, dropsXP, "Set to false for to change spike damage to not drop xp, does not include looting spikes");
+        woodenDamage =cfg.getFloat("Wooden Spike Damage", "Damage", woodenDamage, 0.0F, 100.0F, "Change damage of wooden spike, 1.0 ~= 0.5 hearts.");
+        stoneDamage =cfg.getFloat("Stone Spike Damage", "Damage", stoneDamage, 0.0F, 100.0F, "Change damage of stone spike, 1.0 ~= 0.5 hearts.");
+        ironDamage =cfg.getFloat("Iron Spike Damage", "Damage", ironDamage, 0.0F, 100.0F, "Change damage of iron spike, 1.0 ~= 0.5 hearts.");
+        goldDamage =cfg.getFloat("Gold Spike Damage", "Damage", goldDamage, 0.0F, 100.0F, "Change damage of gold spike, 1.0 ~= 0.5 hearts.");
+        diamondDamage =cfg.getFloat("Diamond Spike Damage", "Damage", diamondDamage, 0.0F, 100.0F, "Change damage of diamond spike, 1.0 ~= 0.5 hearts.");
+        lootingDamage =cfg.getFloat("Looting Spike Damage", "Damage", lootingDamage, 0.0F, 100.0F, "Change damage of looting spike, 1.0 ~= 0.5 hearts.");
 
         if (cfg.hasChanged()) {
             cfg.save();
