@@ -1,6 +1,14 @@
 package com.toastertim.spikemod.block;
 
+import static com.toastertim.spikemod.Config.diamondDamage;
+import static com.toastertim.spikemod.Config.goldDamage;
+import static com.toastertim.spikemod.Config.ironDamage;
+import static com.toastertim.spikemod.Config.lootingDamage;
+import static com.toastertim.spikemod.Config.stoneDamage;
+import static com.toastertim.spikemod.Config.woodenDamage;
+
 import com.toastertim.spikemod.SpikeMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -8,8 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import static com.toastertim.spikemod.Config.*;
 
 /**
  * Created by Tim on 10/6/2016.

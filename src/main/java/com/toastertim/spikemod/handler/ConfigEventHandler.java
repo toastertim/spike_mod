@@ -2,6 +2,7 @@ package com.toastertim.spikemod.handler;
 
 import com.toastertim.spikemod.Config;
 import com.toastertim.spikemod.SpikeMod;
+
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 

@@ -2,6 +2,7 @@ package com.toastertim.spikemod.block;
 
 
 import com.toastertim.spikemod.SpikeMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

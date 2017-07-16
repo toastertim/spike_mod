@@ -1,12 +1,9 @@
 package com.toastertim.spikemod;
 
-import com.toastertim.spikemod.proxy.CommonProxy;
-import net.minecraftforge.common.MinecraftForge;
+import java.io.File;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Level;
-
-import java.io.File;
 
 /**
  * Created by toastertim on 10/9/2016.

@@ -1,8 +1,8 @@
 package com.toastertim.spikemod.tab;
 
 import com.toastertim.spikemod.block.SpikeBlocks;
+
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**

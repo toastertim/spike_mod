@@ -1,6 +1,7 @@
 package com.toastertim.spikemod.crafting;
 
 import com.toastertim.spikemod.block.SpikeBlocks;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
