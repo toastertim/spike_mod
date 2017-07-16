@@ -16,20 +16,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @EventBusSubscriber
 public class ClientProxy extends CommonProxy {
-    
-    @SubscribeEvent
-    public static void registerRenders(ModelRegistryEvent e){
-        registerRender(SpikeBlocks.woodenSpike);
-        registerRender(SpikeBlocks.ironSpike);
-        registerRender(SpikeBlocks.stoneSpike);
-        registerRender(SpikeBlocks.goldSpike);
-        registerRender(SpikeBlocks.diamondSpike);
-        registerRender(SpikeBlocks.lootingSpike);
 
-    }
+	@SubscribeEvent
+	public static void registerRenders(ModelRegistryEvent e) {
+		registerRender(SpikeBlocks.woodenSpike);
+		registerRender(SpikeBlocks.ironSpike);
+		registerRender(SpikeBlocks.stoneSpike);
+		registerRender(SpikeBlocks.goldSpike);
+		registerRender(SpikeBlocks.diamondSpike);
+		registerRender(SpikeBlocks.lootingSpike);
 
-    public static void registerRender(Block block){
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+	}
 
-    }
+	public static void registerRender(Block block) {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+
+	}
 }

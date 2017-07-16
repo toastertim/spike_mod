@@ -22,40 +22,37 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 
 @Mod(modid = SpikeMod.MODID, version = SpikeMod.VERSION, name = SpikeMod.NAME)
-public class SpikeMod
-{
-    public static final String MODID = "spikemod";
-    public static final String VERSION = "1.12-2.0.0";
-    public static final String NAME = "Spike Mod";
+public class SpikeMod {
+	public static final String MODID = "spikemod";
+	public static final String VERSION = "1.12-2.0.0";
+	public static final String NAME = "Spike Mod";
 
-    @SidedProxy(clientSide = "com.toastertim.spikemod.proxy.ClientProxy", serverSide = "com.toastertim.spikemod.proxy.CommonProxy")
-    public static CommonProxy proxy;
+	@SidedProxy(clientSide = "com.toastertim.spikemod.proxy.ClientProxy", serverSide = "com.toastertim.spikemod.proxy.CommonProxy")
+	public static CommonProxy proxy;
 
-    @Mod.Instance
-    public static SpikeMod instance;
+	@Mod.Instance
+	public static SpikeMod instance;
 
-    public static final CreativeTabs SPIKE_TAB = new SpikeTab(CreativeTabs.getNextID(), "spike_tab");
+	public static final CreativeTabs SPIKE_TAB = new SpikeTab(CreativeTabs.getNextID(), "spike_tab");
 
-    public static Logger logger;
+	public static Logger logger;
 
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		Config.init(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
+		logger = event.getModLog();
+		proxy.preInit(event);
+	}
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event){
-        Config.init(event.getSuggestedConfigurationFile());
-        MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
-        logger = event.getModLog();
-        proxy.preInit(event);
-    }
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		SpikeRecipes.addRecipes();
+		proxy.init(event);
+	}
 
-    @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        SpikeRecipes.addRecipes();
-        proxy.init(event);
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event){
-        proxy.postInit(event);
-    }
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		proxy.postInit(event);
+	}
 }

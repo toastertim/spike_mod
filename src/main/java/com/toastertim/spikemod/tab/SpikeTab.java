@@ -10,12 +10,12 @@ import net.minecraft.item.ItemStack;
  */
 public class SpikeTab extends CreativeTabs {
 
-    public SpikeTab(int index, String label) {
-        super(index, label);
-    }
+	public SpikeTab(int index, String label) {
+		super(index, label);
+	}
 
-    @Override
-    public ItemStack getTabIconItem() {
-        return new ItemStack(SpikeBlocks.diamondSpike);
-    }
+	@Override
+	public ItemStack getTabIconItem() {
+		return new ItemStack(SpikeBlocks.diamondSpike);
+	}
 }
