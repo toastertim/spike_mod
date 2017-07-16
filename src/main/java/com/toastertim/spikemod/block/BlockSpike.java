@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -38,12 +39,13 @@ public class BlockSpike extends Block{
     public BlockSpike(String name, float value){
         super(Material.ROCK);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(SpikeMod.spikeTab);
+        this.setCreativeTab(SpikeMod.SPIKE_TAB);
         this.setHardness(1F);
         this.setResistance(1F);
         this.setSoundType(SoundType.STONE);
         spikeType = value;
-
+        SpikeBlocks.BLOCKS.add(this);
+        SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
     }
 
 

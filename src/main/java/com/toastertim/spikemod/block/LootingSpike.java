@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -40,12 +41,13 @@ public class LootingSpike extends Block{
     public LootingSpike(String name, float value){
         super(Material.ROCK);
         this.setUnlocalizedName(name);
-        this.setCreativeTab(SpikeMod.spikeTab);
+        this.setCreativeTab(SpikeMod.SPIKE_TAB);
         this.setHardness(1F);
         this.setResistance(1F);
         this.setSoundType(SoundType.STONE);
         spikeType = value;
-
+        SpikeBlocks.BLOCKS.add(this);
+        SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
     }
 
 

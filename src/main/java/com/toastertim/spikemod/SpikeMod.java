@@ -2,7 +2,6 @@ package com.toastertim.spikemod;
 
 import org.apache.logging.log4j.Logger;
 
-import com.toastertim.spikemod.block.SpikeBlocks;
 import com.toastertim.spikemod.crafting.SpikeRecipes;
 import com.toastertim.spikemod.handler.ConfigEventHandler;
 import com.toastertim.spikemod.proxy.CommonProxy;
@@ -26,7 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class SpikeMod
 {
     public static final String MODID = "spikemod";
-    public static final String VERSION = "1.11.2-1.2.1";
+    public static final String VERSION = "1.12-2.0.0";
     public static final String NAME = "Spike Mod";
 
     @SidedProxy(clientSide = "com.toastertim.spikemod.proxy.ClientProxy", serverSide = "com.toastertim.spikemod.proxy.CommonProxy")
@@ -35,7 +34,7 @@ public class SpikeMod
     @Mod.Instance
     public static SpikeMod instance;
 
-    public static SpikeTab spikeTab;
+    public static final CreativeTabs SPIKE_TAB = new SpikeTab(CreativeTabs.getNextID(), "spike_tab");
 
     public static Logger logger;
 
@@ -45,8 +44,6 @@ public class SpikeMod
         Config.init(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
         logger = event.getModLog();
-        spikeTab = new SpikeTab(CreativeTabs.getNextID(), "spike_tab");
-        SpikeBlocks.preInit();
         proxy.preInit(event);
     }
 
