@@ -14,74 +14,58 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by Tim on 10/5/2016.
  */
 public class BlockSpike extends Block {
+	
+	public float damage;
 
-	public static EntityPlayer player;
-	public float spikeType;
-	public static FakePlayer fake;
-	public static EntityLivingBase livingEntity;
-	public boolean flag = true;
-
-	public BlockSpike(String name, float value) {
+	public BlockSpike(String name, float damage) {
 		super(Material.ROCK);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(SpikeMod.SPIKE_TAB);
 		this.setHardness(1F);
 		this.setResistance(1F);
 		this.setSoundType(SoundType.STONE);
-		spikeType = value;
+		this.damage = damage;
+		setRegistryName(name);
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
 	}
 
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 
-		if (dropsXP) {
-			if (!(entityIn instanceof EntityPlayer)) {
-				if (entityIn instanceof EntityLivingBase) {
-					fake = FakePlayerFactory.getMinecraft((WorldServer) worldIn);
-					player = (EntityPlayer) fake;
+		if (dropsXP)
+			if (!(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase) {
+				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
 
-					livingEntity = (EntityLivingBase) entityIn;
-					livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), spikeType);
-
-				}
-			} else if (entityIn instanceof EntityPlayer)
-				entityIn.attackEntityFrom(DamageSource.GENERIC, spikeType);
 		} else
-			entityIn.attackEntityFrom(DamageSource.GENERIC, spikeType);
-
-		super.onEntityWalk(worldIn, pos, entityIn);
+			entity.attackEntityFrom(DamageSource.CACTUS, damage);
 	}
 
-	//for the purposes of skyblocks, mobs can spawn on this block
+	
 	@Override
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-		return super.canCreatureSpawn(state, world, pos, type);
+		return true;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean isFullCube(IBlockState state){
 		return false;
 	}
-
+	
 	@Override
-	public boolean isBlockNormalCube(IBlockState state) {
+	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
 

@@ -1,5 +1,7 @@
 package com.toastertim.spikemod.block;
 
+import static com.toastertim.spikemod.Config.dropsXP;
+
 import com.toastertim.spikemod.SpikeMod;
 
 import net.minecraft.block.Block;
@@ -31,60 +33,48 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class LootingSpike extends Block {
 
-	public static EntityPlayer player;
-	public float spikeType;
-	public static FakePlayer fake;
-	public static EntityLivingBase livingEntity;
-	public boolean flag = true;
+	public float damage;
 
-	public LootingSpike(String name, float value) {
+	public LootingSpike(String name, float damage) {
 		super(Material.ROCK);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(SpikeMod.SPIKE_TAB);
 		this.setHardness(1F);
 		this.setResistance(1F);
 		this.setSoundType(SoundType.STONE);
-		spikeType = value;
+		this.damage = damage;
+		setRegistryName(name);
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
 	}
 
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 
-		if (!(entityIn instanceof EntityPlayer)) {
-			if (entityIn instanceof EntityLivingBase) {
-				fake = FakePlayerFactory.getMinecraft((WorldServer) worldIn);
-				player = (EntityPlayer) fake;
-				if (flag) {
-					ItemStack onHand = new ItemStack(Items.STICK);
-					onHand.addEnchantment(Enchantments.LOOTING, 3);
-					player.setHeldItem(EnumHand.MAIN_HAND, onHand);
-
-				}
-				livingEntity = (EntityLivingBase) entityIn;
-				livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), spikeType);
-
-			}
-		} else if (entityIn instanceof EntityPlayer)
-			entityIn.attackEntityFrom(DamageSource.GENERIC, spikeType);
-		super.onEntityWalk(worldIn, pos, entityIn);
+		if (!(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase) {
+			FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+			ItemStack onHand = new ItemStack(Items.STICK);
+			onHand.addEnchantment(Enchantments.LOOTING, 3);
+			player.setHeldItem(EnumHand.MAIN_HAND, onHand);
+			entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
+		}
+		
+		entity.attackEntityFrom(DamageSource.CACTUS, damage);
 	}
 
 	//for the purposes of skyblocks, mobs can spawn on this block
 	@Override
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-		return super.canCreatureSpawn(state, world, pos, type);
+		return true;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean isFullCube(IBlockState state){
 		return false;
 	}
-
+	
 	@Override
-	public boolean isBlockNormalCube(IBlockState state) {
+	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
 
