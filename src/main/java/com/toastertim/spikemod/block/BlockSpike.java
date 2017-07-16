@@ -1,6 +1,6 @@
 package com.toastertim.spikemod.block;
 
-import static com.toastertim.spikemod.Config.dropsXP;
+import static com.toastertim.spikemod.Config.playerDamage;
 
 import com.toastertim.spikemod.SpikeMod;
 
@@ -11,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -28,13 +27,13 @@ public class BlockSpike extends Block {
 	
 	public float damage;
 
-	public BlockSpike(String name, float damage) {
-		super(Material.ROCK);
+	public BlockSpike(String name, float damage, Material m, SoundType s) {
+		super(m);
 		this.setUnlocalizedName(name);
 		this.setCreativeTab(SpikeMod.SPIKE_TAB);
 		this.setHardness(1F);
 		this.setResistance(1F);
-		this.setSoundType(SoundType.STONE);
+		this.setSoundType(s);
 		this.damage = damage;
 		setRegistryName(name);
 		SpikeBlocks.BLOCKS.add(this);
@@ -44,8 +43,8 @@ public class BlockSpike extends Block {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 
-		if (dropsXP)
-			if (!(entity instanceof EntityPlayer) && entity instanceof EntityLivingBase) {
+		if (playerDamage)
+			if (entity instanceof EntityLivingBase) {
 				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
 				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
 
