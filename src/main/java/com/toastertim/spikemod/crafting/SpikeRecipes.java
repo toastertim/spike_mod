@@ -18,12 +18,12 @@ public class SpikeRecipes {
 		int j = 0;
 		ResourceLocation g = new ResourceLocation(SpikeMod.MODID, "l");
 
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.woodenSpike, 3), " S ", "SLS", "LWL", 'S', Items.WOODEN_SWORD, 'L', Blocks.LOG, 'W', Blocks.PLANKS);
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.stoneSpike, 3), " S ", "SKS", "KBK", 'S', Items.STONE_SWORD, 'K', SpikeBlocks.woodenSpike, 'B', Blocks.STONEBRICK);
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.ironSpike, 3), " S ", "SKS", "KBK", 'S', Items.IRON_SWORD, 'K', SpikeBlocks.stoneSpike, 'B', Blocks.IRON_BLOCK);
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.goldSpike, 3), " S ", "SKS", "KBK", 'S', Items.GOLDEN_SWORD, 'K', SpikeBlocks.ironSpike, 'B', Blocks.GOLD_BLOCK);
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.diamondSpike, 3), " S ", "SKS", "KBK", 'S', Items.DIAMOND_SWORD, 'K', SpikeBlocks.goldSpike, 'B', Blocks.DIAMOND_BLOCK);
-		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.lootingSpike, 1), "ASA", "SXS", "AEA", 'S', SpikeBlocks.diamondSpike, 'A', Items.BOOK, 'X', Items.NETHER_STAR, 'E', Blocks.ENCHANTING_TABLE);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.woodenSpike, 4), " S ", "SLS", "LWL", 'S', Items.WOODEN_SWORD, 'L', Blocks.LOG, 'W', Blocks.PLANKS);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.stoneSpike, 4), " S ", "SKS", "KBK", 'S', Items.STONE_SWORD, 'K', SpikeBlocks.woodenSpike, 'B', Blocks.STONEBRICK);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.ironSpike, 4), " S ", "SKS", "KBK", 'S', Items.IRON_SWORD, 'K', SpikeBlocks.stoneSpike, 'B', Blocks.IRON_BLOCK);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.goldSpike, 4), " S ", "SKS", "KBK", 'S', Items.GOLDEN_SWORD, 'K', SpikeBlocks.ironSpike, 'B', Blocks.GOLD_BLOCK);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.diamondSpike, 4), " S ", "SKS", "KBK", 'S', Items.DIAMOND_SWORD, 'K', SpikeBlocks.goldSpike, 'B', Blocks.DIAMOND_BLOCK);
+		GameRegistry.addShapedRecipe(new ResourceLocation(SpikeMod.MODID, "recipe" + j++), g, new ItemStack(SpikeBlocks.lootingSpike, 4), "ASA", "SXS", "AEA", 'S', SpikeBlocks.diamondSpike, 'A', Items.BOOK, 'X', Items.NETHER_STAR, 'E', Blocks.ENCHANTING_TABLE);
 
 	}
 }

@@ -13,13 +13,15 @@ public class Config {
 	private static final String CATEGORY_GENERAL = "general";
 
 	public static boolean playerDamage = true;
-	public static float woodenDamage = 1.5F;
-	public static float stoneDamage = 2.0F;
-	public static float ironDamage = 2.5F;
-	public static float goldDamage = 3.0F;
-	public static float diamondDamage = 3.5F;
-	public static float lootingDamage = 4.0F;
+	public static float woodenDamage = 3F;
+	public static float stoneDamage = 4F;
+	public static float ironDamage = 7F;
+	public static float goldDamage = 4F;
+	public static float diamondDamage = 8F;
+	public static float lootingDamage = 12F;
 	public static Configuration cfg;
+
+	public static float[] damages;
 
 	public Config() {
 
@@ -33,7 +35,7 @@ public class Config {
 	}
 
 	public static void initConfig() {
-		playerDamage = cfg.getBoolean("Do XP Drop", CATEGORY_GENERAL, playerDamage, "Set to false to change spike damage to not deal player damage, does not include looting spikes");
+		playerDamage = cfg.getBoolean("Use Player Damage", CATEGORY_GENERAL, playerDamage, "Controls if a diamond spike uses player damage.");
 		woodenDamage = cfg.getFloat("Wooden Spike Damage", "Damage", woodenDamage, 0.0F, 100.0F, "Damage of wooden spike, 1.0 = 0.5 hearts.");
 		stoneDamage = cfg.getFloat("Stone Spike Damage", "Damage", stoneDamage, 0.0F, 100.0F, "Damage of stone spike, 1.0 = 0.5 hearts.");
 		ironDamage = cfg.getFloat("Iron Spike Damage", "Damage", ironDamage, 0.0F, 100.0F, "Damage of iron spike, 1.0 = 0.5 hearts.");
@@ -44,6 +46,8 @@ public class Config {
 		if (cfg.hasChanged()) {
 			cfg.save();
 		}
+
+		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage };
 	}
 
 	public static ConfigCategory getCategory(String category) {

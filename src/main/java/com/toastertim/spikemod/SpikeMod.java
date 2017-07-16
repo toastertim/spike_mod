@@ -2,6 +2,7 @@ package com.toastertim.spikemod;
 
 import org.apache.logging.log4j.Logger;
 
+import com.toastertim.spikemod.block.SpikeTypes;
 import com.toastertim.spikemod.crafting.SpikeRecipes;
 import com.toastertim.spikemod.handler.ConfigEventHandler;
 import com.toastertim.spikemod.proxy.CommonProxy;
@@ -42,6 +43,8 @@ public class SpikeMod {
 		Config.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
 		logger = event.getModLog();
+		for (SpikeTypes s : SpikeTypes.values())
+			s.setDamage(Config.damages[s.ordinal()]);
 		proxy.preInit(event);
 	}
 

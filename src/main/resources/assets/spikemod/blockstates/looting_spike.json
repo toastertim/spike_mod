@@ -1,5 +1,14 @@
 {
-  "variants": {
-    "normal": { "model": "spikemod:looting_spike" }
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "spikemod:spike",
+		"textures": {
+			"down": "spikemod:blocks/looting_spike"
+		},
+		"transform": "forge:default-block"
+	},
+	"variants": {
+		"inventory": [{}],
+		"normal": [{}]
+	}
 }

@@ -2,7 +2,6 @@ package com.toastertim.spikemod.proxy;
 
 import com.toastertim.spikemod.block.SpikeBlocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -19,17 +18,8 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public static void registerRenders(ModelRegistryEvent e) {
-		registerRender(SpikeBlocks.woodenSpike);
-		registerRender(SpikeBlocks.ironSpike);
-		registerRender(SpikeBlocks.stoneSpike);
-		registerRender(SpikeBlocks.goldSpike);
-		registerRender(SpikeBlocks.diamondSpike);
-		registerRender(SpikeBlocks.lootingSpike);
-
-	}
-
-	public static void registerRender(Block block) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		for (Item k : SpikeBlocks.ITEMS)
+			ModelLoader.setCustomModelResourceLocation(k, 0, new ModelResourceLocation(k.getRegistryName(), "inventory"));
 
 	}
 }

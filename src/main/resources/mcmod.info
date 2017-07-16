@@ -2,9 +2,9 @@
 {
   "modid": "spikemod",
   "name": "Spike Mod",
-  "description": "Toastertim's spike mod for 1.10.2, functionality originally ported due to lack of ExU spikes in ExU2",
-  "version": "1.2.1",
-  "mcversion": "1.10.2",
+  "description": "Toastertim's spike mod for 1.12, functionality originally ported due to lack of ExU spikes in ExU2",
+  "version": "2.0.0",
+  "mcversion": "1.12",
   "url": "https://minecraft.curseforge.com/projects/spikes",
   "updateUrl": "",
   "authorList": ["toastertim"],

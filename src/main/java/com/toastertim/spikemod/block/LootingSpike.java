@@ -1,5 +1,6 @@
 package com.toastertim.spikemod.block;
 
+import com.toastertim.spikemod.Config;
 import com.toastertim.spikemod.SpikeMod;
 
 import net.minecraft.block.Block;
@@ -9,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
@@ -27,33 +29,32 @@ import net.minecraftforge.common.util.FakePlayerFactory;
  */
 public class LootingSpike extends Block {
 
-	public float damage;
-
-	public LootingSpike(String name, float damage) {
+	public LootingSpike() {
 		super(Material.ROCK);
-		this.setUnlocalizedName(name);
+		this.setUnlocalizedName("looting_spike");
 		this.setCreativeTab(SpikeMod.SPIKE_TAB);
 		this.setHardness(1F);
 		this.setResistance(1F);
 		this.setSoundType(SoundType.STONE);
-		this.damage = damage;
-		setRegistryName(name);
+		setRegistryName("looting_spike");
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
 	}
 
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
+		if (!world.isRemote) {
+			if (entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
+				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+				ItemStack onHand = new ItemStack(Items.STICK);
+				onHand.addEnchantment(Enchantments.LOOTING, 3);
+				player.setHeldItem(EnumHand.MAIN_HAND, onHand);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), Config.lootingDamage);
+				player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+			}
 
-		if (entity instanceof EntityLivingBase) {
-			FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
-			ItemStack onHand = new ItemStack(Items.STICK);
-			onHand.addEnchantment(Enchantments.LOOTING, 3);
-			player.setHeldItem(EnumHand.MAIN_HAND, onHand);
-			entity.attackEntityFrom(DamageSource.causePlayerDamage(player), damage);
+			entity.attackEntityFrom(DamageSource.CACTUS, Config.lootingDamage);
 		}
-		
-		entity.attackEntityFrom(DamageSource.CACTUS, damage);
 	}
 
 	//for the purposes of skyblocks, mobs can spawn on this block
@@ -63,10 +64,10 @@ public class LootingSpike extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state){
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isNormalCube(IBlockState state) {
 		return false;
