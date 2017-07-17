@@ -26,18 +26,18 @@ public enum SpikeTypes {
 	}
 
 	public static void readConfig() {
-		for(SpikeTypes s : SpikeTypes.values()){
+		for (SpikeTypes s : SpikeTypes.values()) {
 			s.setDamage(Config.damages[s.ordinal()]);
 		}
 		GOLD.setUsePlayer(Config.playerDamage);
 		DIAMOND.setUsePlayer(Config.playerDamage);
 	}
-	
-	public void setDamage(float k){
+
+	public void setDamage(float k) {
 		damage = k;
 	}
-	
-	public void setUsePlayer(boolean p){
+
+	public void setUsePlayer(boolean p) {
 		usePlayer = p;
 	}
 
