@@ -8,11 +8,12 @@ public enum SpikeTypes {
 	STONE("stone_spike", Config.stoneDamage, false),
 	IRON("iron_spike", Config.ironDamage, false),
 	GOLD("golden_spike", Config.goldDamage, Config.playerDamage),
-	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage);
+	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage),
+	LOOTING("looting_spike", Config.lootingDamage, true);
 
 	private final String name;
 	private float damage;
-	private final boolean usePlayer;
+	private boolean usePlayer;
 
 	private SpikeTypes(String name, float damage, boolean usePlayer) {
 		this.name = name;
@@ -24,8 +25,20 @@ public enum SpikeTypes {
 		return usePlayer;
 	}
 
-	public void setDamage(float k) {
+	public static void readConfig() {
+		for(SpikeTypes s : SpikeTypes.values()){
+			s.setDamage(Config.damages[s.ordinal()]);
+		}
+		GOLD.setUsePlayer(Config.playerDamage);
+		DIAMOND.setUsePlayer(Config.playerDamage);
+	}
+	
+	public void setDamage(float k){
 		damage = k;
+	}
+	
+	public void setUsePlayer(boolean p){
+		usePlayer = p;
 	}
 
 	public float getDamage() {

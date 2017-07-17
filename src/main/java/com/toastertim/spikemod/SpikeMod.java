@@ -43,8 +43,6 @@ public class SpikeMod {
 		Config.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
 		logger = event.getModLog();
-		for (SpikeTypes s : SpikeTypes.values())
-			s.setDamage(Config.damages[s.ordinal()]);
 		proxy.preInit(event);
 	}
 

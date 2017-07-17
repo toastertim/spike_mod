@@ -31,8 +31,6 @@ import net.minecraftforge.common.util.FakePlayerFactory;
  */
 public class BlockSpike extends Block {
 
-	public static final AxisAlignedBB SPIKE_BOX = new AxisAlignedBB(0, 0, 0, 16, 16, 16);
-
 	private final SpikeTypes type;
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
@@ -78,58 +76,49 @@ public class BlockSpike extends Block {
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	private static final double px = 0.0625D; // 1/16, the value of a pixel of space.
-	
-	 private static ImmutableList<AxisAlignedBB> SPIKE_BOUNDS = ImmutableList.of(
-	     new AxisAlignedBB(0, 0, 0, 1, px*2, 1),
-	     new AxisAlignedBB(px, px*2, px, 1-px, px*4, 1-px),
-	     new AxisAlignedBB(px*2, px*4, px*2, 1-px*2, px*6, 1-px*2),
-	     new AxisAlignedBB(px*3, px*6, px*3, 1-px*3, px*8, 1-px*3),
-	     new AxisAlignedBB(px*4, px*8, px*4, 1-px*4, px*10, 1-px*4),
-	     new AxisAlignedBB(px*5, px*10, px*5, 1-px*5, px*12, 1-px*5),
-	     new AxisAlignedBB(px*6, px*12, px*6, 1-px*6, px*14, 1-px*6),
-	     new AxisAlignedBB(px*7, px*14, px*7, 1-px*7, px*16, 1-px*7)
-	  );
-	
+
+	private static ImmutableList<AxisAlignedBB> SPIKE_BOUNDS = ImmutableList.of(new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2), new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3), new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4), new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
+
 	//Everything below this line is copypasted from Tinker's Construct. Thx TiC!
 
-	  @Override
-	  public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-	    // basically the same BlockStairs does
-	    // Raytrace through all AABBs (plate, legs) and return the nearest one
-	    return raytraceMultiAABB(SPIKE_BOUNDS, pos, start, end);
-	  }
+	@Override
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+		// basically the same BlockStairs does
+		// Raytrace through all AABBs (plate, legs) and return the nearest one
+		return raytraceMultiAABB(SPIKE_BOUNDS, pos, start, end);
+	}
 
-	  public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
-	    List<RayTraceResult> list = Lists.newArrayList();
+	public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
+		List<RayTraceResult> list = Lists.newArrayList();
 
-	    for(AxisAlignedBB axisalignedbb : aabbs) {
-	      list.add(rayTrace2(pos, start, end, axisalignedbb));
-	    }
+		for (AxisAlignedBB axisalignedbb : aabbs) {
+			list.add(rayTrace2(pos, start, end, axisalignedbb));
+		}
 
-	    RayTraceResult raytraceresult1 = null;
-	    double d1 = 0.0D;
+		RayTraceResult raytraceresult1 = null;
+		double d1 = 0.0D;
 
-	    for(RayTraceResult raytraceresult : list) {
-	      if(raytraceresult != null) {
-	        double d0 = raytraceresult.hitVec.squareDistanceTo(end);
+		for (RayTraceResult raytraceresult : list) {
+			if (raytraceresult != null) {
+				double d0 = raytraceresult.hitVec.squareDistanceTo(end);
 
-	        if(d0 > d1) {
-	          raytraceresult1 = raytraceresult;
-	          d1 = d0;
-	        }
-	      }
-	    }
+				if (d0 > d1) {
+					raytraceresult1 = raytraceresult;
+					d1 = d0;
+				}
+			}
+		}
 
-	    return raytraceresult1;
-	  }
+		return raytraceresult1;
+	}
 
-	  // Block.raytrace
-	  private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
-	    Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
-	    Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
-	    RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
-	    return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
-	  }
+	// Block.raytrace
+	private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+		Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+		Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+		RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
+		return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
+	}
 }

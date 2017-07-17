@@ -2,6 +2,8 @@ package com.toastertim.spikemod;
 
 import java.io.File;
 
+import com.toastertim.spikemod.block.SpikeTypes;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
@@ -47,7 +49,8 @@ public class Config {
 			cfg.save();
 		}
 
-		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage };
+		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, lootingDamage };
+		SpikeTypes.readConfig();
 	}
 
 	public static ConfigCategory getCategory(String category) {
