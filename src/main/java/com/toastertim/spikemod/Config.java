@@ -1,57 +1,59 @@
 package com.toastertim.spikemod;
 
-import com.toastertim.spikemod.proxy.CommonProxy;
-import net.minecraftforge.common.MinecraftForge;
+import java.io.File;
+
+import com.toastertim.spikemod.block.SpikeTypes;
+
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.Level;
-
-import java.io.File;
 
 /**
  * Created by toastertim on 10/9/2016.
  * Updated 3/2/2017
  */
 public class Config {
-    private static final String CATEGORY_GENERAL = "general";
+	private static final String CATEGORY_GENERAL = "general";
 
-    public static boolean dropsXP = true;
-    public static float woodenDamage = 1.5F;
-    public static float stoneDamage = 2.0F;
-    public static float ironDamage = 2.5F;
-    public static float goldDamage = 3.0F;
-    public static float diamondDamage = 3.5F;
-    public static float lootingDamage = 4.0F;
-    public static Configuration cfg;
+	public static boolean playerDamage = true;
+	public static float woodenDamage = 3F;
+	public static float stoneDamage = 4F;
+	public static float ironDamage = 7F;
+	public static float goldDamage = 4F;
+	public static float diamondDamage = 8F;
+	public static float lootingDamage = 12F;
+	public static Configuration cfg;
 
-    public Config(){
+	public static float[] damages;
 
-    }
+	public Config() {
 
-    public static void init(File configFile)
-    {
-        if (cfg == null) {
-            cfg = new Configuration(configFile);
-            initConfig();
-        }
-    }
+	}
 
-    public static void initConfig() {
-        dropsXP = cfg.getBoolean("Do XP Drop", CATEGORY_GENERAL, dropsXP, "Set to false for to change spike damage to not drop xp, does not include looting spikes");
-        woodenDamage =cfg.getFloat("Wooden Spike Damage", "Damage", woodenDamage, 0.0F, 100.0F, "Change damage of wooden spike, 1.0 ~= 0.5 hearts.");
-        stoneDamage =cfg.getFloat("Stone Spike Damage", "Damage", stoneDamage, 0.0F, 100.0F, "Change damage of stone spike, 1.0 ~= 0.5 hearts.");
-        ironDamage =cfg.getFloat("Iron Spike Damage", "Damage", ironDamage, 0.0F, 100.0F, "Change damage of iron spike, 1.0 ~= 0.5 hearts.");
-        goldDamage =cfg.getFloat("Gold Spike Damage", "Damage", goldDamage, 0.0F, 100.0F, "Change damage of gold spike, 1.0 ~= 0.5 hearts.");
-        diamondDamage =cfg.getFloat("Diamond Spike Damage", "Damage", diamondDamage, 0.0F, 100.0F, "Change damage of diamond spike, 1.0 ~= 0.5 hearts.");
-        lootingDamage =cfg.getFloat("Looting Spike Damage", "Damage", lootingDamage, 0.0F, 100.0F, "Change damage of looting spike, 1.0 ~= 0.5 hearts.");
+	public static void init(File configFile) {
+		if (cfg == null) {
+			cfg = new Configuration(configFile);
+			initConfig();
+		}
+	}
 
-        if (cfg.hasChanged()) {
-            cfg.save();
-        }
-    }
-    public static ConfigCategory getCategory(String category)
-    {
-        return cfg.getCategory(category);
-    }
+	public static void initConfig() {
+		playerDamage = cfg.getBoolean("Use Player Damage", CATEGORY_GENERAL, playerDamage, "Controls if a diamond spike uses player damage.");
+		woodenDamage = cfg.getFloat("Wooden Spike Damage", "Damage", woodenDamage, 0.0F, 100.0F, "Damage of wooden spike, 1.0 = 0.5 hearts.");
+		stoneDamage = cfg.getFloat("Stone Spike Damage", "Damage", stoneDamage, 0.0F, 100.0F, "Damage of stone spike, 1.0 = 0.5 hearts.");
+		ironDamage = cfg.getFloat("Iron Spike Damage", "Damage", ironDamage, 0.0F, 100.0F, "Damage of iron spike, 1.0 = 0.5 hearts.");
+		goldDamage = cfg.getFloat("Gold Spike Damage", "Damage", goldDamage, 0.0F, 100.0F, "Damage of gold spike, 1.0 = 0.5 hearts.");
+		diamondDamage = cfg.getFloat("Diamond Spike Damage", "Damage", diamondDamage, 0.0F, 100.0F, "Damage of diamond spike, 1.0 = 0.5 hearts.");
+		lootingDamage = cfg.getFloat("Looting Spike Damage", "Damage", lootingDamage, 0.0F, 100.0F, "Damage of looting spike, 1.0 = 0.5 hearts.");
+
+		if (cfg.hasChanged()) {
+			cfg.save();
+		}
+
+		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, lootingDamage };
+		SpikeTypes.readConfig();
+	}
+
+	public static ConfigCategory getCategory(String category) {
+		return cfg.getCategory(category);
+	}
 }
-

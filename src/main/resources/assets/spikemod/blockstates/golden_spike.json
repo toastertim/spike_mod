@@ -1,5 +1,14 @@
 {
-  "variants": {
-    "normal": { "model": "spikemod:golden_spike" }
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "spikemod:spike",
+		"textures": {
+			"down": "blocks/gold_block"
+		},
+		"transform": "forge:default-block"
+	},
+	"variants": {
+		"inventory": [{}],
+		"normal": [{}]
+	}
 }

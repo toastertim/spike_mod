@@ -1,97 +1,124 @@
 package com.toastertim.spikemod.block;
 
+import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.toastertim.spikemod.SpikeMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-
-import static com.toastertim.spikemod.Config.dropsXP;
 
 /**
  * Created by Tim on 10/5/2016.
  */
-public class BlockSpike extends Block{
+public class BlockSpike extends Block {
 
-    public static EntityPlayer player;
-    public float spikeType;
-    public static FakePlayer fake;
-    public static EntityLivingBase livingEntity;
-    public boolean flag = true;
+	private final SpikeTypes type;
 
-    public BlockSpike(String name, float value){
-        super(Material.ROCK);
-        this.setUnlocalizedName(name);
-        this.setCreativeTab(SpikeMod.spikeTab);
-        this.setHardness(1F);
-        this.setResistance(1F);
-        this.setSoundType(SoundType.STONE);
-        spikeType = value;
+	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
+		super(m);
+		this.setUnlocalizedName(type.getName());
+		this.setCreativeTab(SpikeMod.SPIKE_TAB);
+		this.setHardness(1F);
+		this.setResistance(1F);
+		this.setSoundType(s);
+		this.type = type;
+		setRegistryName(type.getName());
+		SpikeBlocks.BLOCKS.add(this);
+		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
+	}
 
-    }
+	@Override
+	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
+		if (!world.isRemote) {
+			if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
+				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
+			} else
+				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+		}
+	}
 
+	@Override
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+		return true;
+	}
 
-    @Override
-    public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
 
-        if(dropsXP) {
-            if (!(entityIn instanceof EntityPlayer)) {
-                if (entityIn instanceof EntityLivingBase) {
-                    fake = FakePlayerFactory.getMinecraft((WorldServer) worldIn);
-                    player = (EntityPlayer) fake;
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
 
-                    livingEntity = (EntityLivingBase) entityIn;
-                    livingEntity.attackEntityFrom(DamageSource.causePlayerDamage(player), spikeType);
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-                }
-            } else if (entityIn instanceof EntityPlayer) entityIn.attackEntityFrom(DamageSource.GENERIC, spikeType);
-        } else entityIn.attackEntityFrom(DamageSource.GENERIC, spikeType);
+	private static final double px = 0.0625D; // 1/16, the value of a pixel of space.
 
-        super.onEntityWalk(worldIn, pos, entityIn);
-    }
+	private static ImmutableList<AxisAlignedBB> SPIKE_BOUNDS = ImmutableList.of(new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2), new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3), new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4), new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
 
-    //for the purposes of skyblocks, mobs can spawn on this block
-    @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
-        return super.canCreatureSpawn(state, world, pos, type);
-    }
+	//Everything below this line is copypasted from Tinker's Construct. Thx TiC!
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return false;
-    }
+	@Override
+	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+		// basically the same BlockStairs does
+		// Raytrace through all AABBs (plate, legs) and return the nearest one
+		return raytraceMultiAABB(SPIKE_BOUNDS, pos, start, end);
+	}
 
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) {
-        return false;
-    }
+	public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
+		List<RayTraceResult> list = Lists.newArrayList();
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+		for (AxisAlignedBB axisalignedbb : aabbs) {
+			list.add(rayTrace2(pos, start, end, axisalignedbb));
+		}
+
+		RayTraceResult raytraceresult1 = null;
+		double d1 = 0.0D;
+
+		for (RayTraceResult raytraceresult : list) {
+			if (raytraceresult != null) {
+				double d0 = raytraceresult.hitVec.squareDistanceTo(end);
+
+				if (d0 > d1) {
+					raytraceresult1 = raytraceresult;
+					d1 = d0;
+				}
+			}
+		}
+
+		return raytraceresult1;
+	}
+
+	// Block.raytrace
+	private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+		Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+		Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+		RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
+		return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
+	}
 }
