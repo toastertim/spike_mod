@@ -4,21 +4,23 @@ import com.toastertim.spikemod.Config;
 
 public enum SpikeTypes {
 
-	WOODEN("wooden_spike", Config.woodenDamage, false),
-	STONE("stone_spike", Config.stoneDamage, false),
-	IRON("iron_spike", Config.ironDamage, false),
-	GOLD("golden_spike", Config.goldDamage, Config.playerDamage),
-	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage),
-	LOOTING("looting_spike", Config.lootingDamage, true);
+	WOODEN("wooden_spike", Config.woodenDamage, false, Config.killingBlow),
+	STONE("stone_spike", Config.stoneDamage, false, true),
+	IRON("iron_spike", Config.ironDamage, false, true),
+	GOLD("golden_spike", Config.goldDamage, Config.playerDamage, true),
+	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage, true),
+	LOOTING("looting_spike", Config.lootingDamage, true, true);
 
 	private final String name;
 	private float damage;
 	private boolean usePlayer;
+	private boolean killsEntity;
 
-	private SpikeTypes(String name, float damage, boolean usePlayer) {
+	private SpikeTypes(String name, float damage, boolean usePlayer, boolean killsEntity) {
 		this.name = name;
 		this.damage = damage;
 		this.usePlayer = usePlayer;
+		this.killsEntity = killsEntity;
 	}
 
 	public boolean usesPlayer() {
@@ -31,6 +33,8 @@ public enum SpikeTypes {
 		}
 		GOLD.setUsePlayer(Config.playerDamage);
 		DIAMOND.setUsePlayer(Config.playerDamage);
+		WOODEN.setKillsEntity(Config.killingBlow);
+
 	}
 
 	public void setDamage(float k) {
@@ -41,6 +45,8 @@ public enum SpikeTypes {
 		usePlayer = p;
 	}
 
+	public void setKillsEntity (boolean k) {killsEntity = k;}
+
 	public float getDamage() {
 		return damage;
 	}
@@ -48,5 +54,13 @@ public enum SpikeTypes {
 	public String getName() {
 		return name;
 	}
+
+	public boolean getKillsEntity() {return killsEntity;}
+
+
+
+
+
+
 
 }

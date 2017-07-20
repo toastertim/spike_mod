@@ -21,6 +21,7 @@ public class Config {
 	public static float goldDamage = 4F;
 	public static float diamondDamage = 8F;
 	public static float lootingDamage = 12F;
+	public static boolean killingBlow = false;
 	public static Configuration cfg;
 
 	public static float[] damages;
@@ -44,6 +45,7 @@ public class Config {
 		goldDamage = cfg.getFloat("Gold Spike Damage", "Damage", goldDamage, 0.0F, 100.0F, "Damage of gold spike, 1.0 = 0.5 hearts.");
 		diamondDamage = cfg.getFloat("Diamond Spike Damage", "Damage", diamondDamage, 0.0F, 100.0F, "Damage of diamond spike, 1.0 = 0.5 hearts.");
 		lootingDamage = cfg.getFloat("Looting Spike Damage", "Damage", lootingDamage, 0.0F, 100.0F, "Damage of looting spike, 1.0 = 0.5 hearts.");
+		killingBlow = cfg.getBoolean("Kills Entity", CATEGORY_GENERAL, killingBlow, "Controls if Wooden Spike deals killing blow");
 
 		if (cfg.hasChanged()) {
 			cfg.save();

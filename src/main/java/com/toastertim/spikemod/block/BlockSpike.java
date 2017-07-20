@@ -41,6 +41,7 @@ public class BlockSpike extends Block {
 		this.setResistance(1F);
 		this.setSoundType(s);
 		this.type = type;
+
 		setRegistryName(type.getName());
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
@@ -49,11 +50,18 @@ public class BlockSpike extends Block {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 		if (!world.isRemote) {
-			if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
-				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
-				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
-			} else
-				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+
+				if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
+					FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
+				} else if (type.getKillsEntity() == false) {
+					if (((EntityLivingBase) entity).getHealth() > type.getDamage()) {
+						entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+					} else if (((EntityLivingBase) entity).getHealth() > 1F && ((EntityLivingBase) entity).getHealth() <= type.getDamage()) {
+						entity.attackEntityFrom(DamageSource.CACTUS, 1F);
+					}
+				} else entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+
 		}
 	}
 
