@@ -26,6 +26,7 @@ public class SpikeBlocks {
 	public static final Block ironSpike = new BlockSpike(SpikeTypes.IRON, Material.IRON, SoundType.METAL);
 	public static final Block goldSpike = new BlockSpike(SpikeTypes.GOLD, Material.IRON, SoundType.METAL);
 	public static final Block diamondSpike = new BlockSpike(SpikeTypes.DIAMOND, Material.IRON, SoundType.METAL);
+	public static final Block freezingSpike = new BlockSpike(SpikeTypes.FREEZING, Material.ICE, SoundType.STONE);
 	public static final Block lootingSpike = new LootingSpike();
 
 	@SubscribeEvent

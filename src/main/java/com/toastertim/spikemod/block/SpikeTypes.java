@@ -9,6 +9,7 @@ public enum SpikeTypes {
 	IRON("iron_spike", Config.ironDamage, false, true),
 	GOLD("golden_spike", Config.goldDamage, Config.playerDamage, true),
 	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage, true),
+	FREEZING("freezing_spike", Config.freezingDamage, false, true),
 	LOOTING("looting_spike", Config.lootingDamage, true, true);
 
 	private final String name;

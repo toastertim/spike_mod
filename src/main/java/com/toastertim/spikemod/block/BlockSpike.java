@@ -15,6 +15,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -50,8 +53,10 @@ public class BlockSpike extends Block {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 		if (!world.isRemote) {
+				if (type.equals(SpikeTypes.FREEZING) && !(entity instanceof EntityPlayer)) {
+					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
 
-				if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
+				} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
 					FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
 					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
 				} else if (type.getKillsEntity() == false) {
