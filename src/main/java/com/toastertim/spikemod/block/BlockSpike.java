@@ -11,6 +11,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,8 +54,11 @@ public class BlockSpike extends Block {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 		if (!world.isRemote) {
-				if (type.equals(SpikeTypes.FREEZING) && !(entity instanceof EntityPlayer)) {
+				if (type.equals(SpikeTypes.FREEZING) && !(entity instanceof EntityPlayer) && (entity instanceof EntityLivingBase)) {
 					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
+				} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE) && !(entity instanceof EntityPlayer) && (entity instanceof EntityLivingBase)) {
+					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(20), 200, 1));
+					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
 
 				} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
 					FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
