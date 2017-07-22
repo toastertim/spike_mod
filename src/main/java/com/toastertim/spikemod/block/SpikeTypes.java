@@ -11,6 +11,7 @@ public enum SpikeTypes {
 	DIAMOND("diamond_spike", Config.diamondDamage, Config.playerDamage, true),
 	FREEZING("freezing_spike", Config.freezingDamage, false, true),
 	EXTRASHARPSPIKE("extra_sharp_spike", Config.extraSharpDamage, false, true),
+	HOTSPIKE("hot_spike", Config.hotSpikeDamage, false, true),
 	LOOTING("looting_spike", Config.lootingDamage, true, true);
 
 	private final String name;

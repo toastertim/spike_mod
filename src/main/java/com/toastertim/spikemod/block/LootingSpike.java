@@ -42,4 +42,5 @@ public class LootingSpike extends BlockSpike {
 		}
 	}
 
+
 }

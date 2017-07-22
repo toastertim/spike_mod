@@ -22,6 +22,7 @@ public class Config {
 	public static float diamondDamage = 8F;
 	public static float freezingDamage = 0F;
 	public static float extraSharpDamage = 2F;
+	public static float hotSpikeDamage = 3F;
 	public static float lootingDamage = 12F;
 	public static boolean killingBlow = false;
 	public static Configuration cfg;
@@ -48,6 +49,7 @@ public class Config {
 		diamondDamage = cfg.getFloat("Diamond Spike Damage", "Damage", diamondDamage, 0.0F, 100.0F, "Damage of diamond spike, 1.0 = 0.5 hearts.");
 		freezingDamage = cfg.getFloat("Freezing Spike Damage", "Damage", freezingDamage, 0.0F, 100.0F, "Damage of freezing spike, 1.0 = 0.5 hearts.");
 		extraSharpDamage = cfg.getFloat("Extra Sharp Spike Damage", "Damage", extraSharpDamage, 0.0F, 100.0F, "Base damage of extra sharp spike. Also deals ticking damage as the entity 'bleeds out' over the spike.");
+		hotSpikeDamage = cfg.getFloat("Hot Spike Base Damage", "Damage", hotSpikeDamage, 0.0F, 100.0F, "Base damage of hot spike, 1.0 = 0.5 hearts.");
 		lootingDamage = cfg.getFloat("Looting Spike Damage", "Damage", lootingDamage, 0.0F, 100.0F, "Damage of looting spike, 1.0 = 0.5 hearts.");
 		killingBlow = cfg.getBoolean("Kills Entity", CATEGORY_GENERAL, killingBlow, "Controls if Wooden Spike deals killing blow");
 
@@ -55,7 +57,7 @@ public class Config {
 			cfg.save();
 		}
 
-		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, freezingDamage, extraSharpDamage, lootingDamage };
+		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, freezingDamage, extraSharpDamage, hotSpikeDamage, lootingDamage };
 		SpikeTypes.readConfig();
 	}
 

@@ -54,12 +54,14 @@ public class BlockSpike extends Block {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 		if (!world.isRemote) {
-				if (type.equals(SpikeTypes.FREEZING) && !(entity instanceof EntityPlayer) && (entity instanceof EntityLivingBase)) {
+				if (type.equals(SpikeTypes.FREEZING) && (entity instanceof EntityLivingBase)) {
 					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
-				} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE) && !(entity instanceof EntityPlayer) && (entity instanceof EntityLivingBase)) {
+				} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE)  && (entity instanceof EntityLivingBase)) {
 					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(20), 200, 1));
 					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-
+				} else if (type.equals(SpikeTypes.HOTSPIKE) && (entity instanceof EntityLivingBase)) {
+					((EntityLivingBase) entity).setFire(5);
+					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
 				} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
 					FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
 					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
