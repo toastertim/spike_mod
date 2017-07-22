@@ -7,7 +7,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
- * Created by Tim on 3/7/2017.
+ * Created by toastertim on 3/7/2017.
  */
 public class ConfigEventHandler {
 	@SubscribeEvent

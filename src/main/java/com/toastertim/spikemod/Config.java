@@ -7,10 +7,7 @@ import com.toastertim.spikemod.block.SpikeTypes;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
-/**
- * Created by toastertim on 10/9/2016.
- * Updated 3/2/2017
- */
+
 public class Config {
 	private static final String CATEGORY_GENERAL = "general";
 

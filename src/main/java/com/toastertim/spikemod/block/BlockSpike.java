@@ -7,19 +7,22 @@ import com.google.common.collect.Lists;
 import com.toastertim.spikemod.SpikeMod;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionType;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -30,11 +33,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-/**
- * Created by Tim on 10/5/2016.
- */
 public class BlockSpike extends Block {
 
+	public static final PropertyDirection FACING = BlockDirectional.FACING;
 	private final SpikeTypes type;
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
@@ -75,6 +76,54 @@ public class BlockSpike extends Block {
 
 		}
 	}
+
+	/**** Begin code to figure out rotation****/
+	@Override
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
+	}
+
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 3);
+
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		int i = 0;
+		i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
+
+		return i;
+	}
+
+	//unsure what to put in this one
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return super.getStateFromMeta(meta);
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] {FACING});
+	}
+
+	/*** End rotation code***/
 
 	@Override
 	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {

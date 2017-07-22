@@ -18,9 +18,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-/**
- * Created by Tim on 10/5/2016.
- */
+
 public class LootingSpike extends BlockSpike {
 
 	public LootingSpike() {

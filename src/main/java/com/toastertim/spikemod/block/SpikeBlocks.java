@@ -11,9 +11,6 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-/**
- * Created by Tim on 10/6/2016.
- */
 
 @EventBusSubscriber
 public class SpikeBlocks {

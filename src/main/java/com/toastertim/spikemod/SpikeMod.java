@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /**
  * Created by toastertim on 10/6/2016.
- * updated 3/2/2017
+ * updated 7/22/2017
  */
 
 @Mod(modid = SpikeMod.MODID, version = SpikeMod.VERSION, name = SpikeMod.NAME)

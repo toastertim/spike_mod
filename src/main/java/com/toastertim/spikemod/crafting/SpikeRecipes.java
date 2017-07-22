@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- * Created by Tim on 10/6/2016.
+ * Created by toastertim on 10/6/2016.
  */
 public class SpikeRecipes {
 	public static void addRecipes() {
