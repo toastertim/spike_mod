@@ -85,8 +85,9 @@ public class BlockSpike extends Block {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 3);
-
+		worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 2);
+		int dir = placer.getHorizontalFacing().getHorizontalIndex();
+		worldIn.setBlockState(pos, getStateFromMeta(dir), 2);
 	}
 
 	@Override
@@ -95,13 +96,55 @@ public class BlockSpike extends Block {
 		i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
 
 		return i;
+
 	}
 
 	//unsure what to put in this one
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return super.getStateFromMeta(meta);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 7));
 	}
+
+
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(worldIn, pos, state);
+		this.setDefaultDirection(worldIn, pos, state);
+	}
+
+	private void setDefaultDirection(World worldIn, BlockPos pos, IBlockState state){
+		if (!worldIn.isRemote){
+			EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+			boolean flag = worldIn.getBlockState(pos.north()).isFullBlock();
+			boolean flag1 = worldIn.getBlockState(pos.south()).isFullBlock();
+
+			if (enumfacing == EnumFacing.NORTH && flag && !flag1)
+			{
+				enumfacing = EnumFacing.SOUTH;
+			}
+			else if (enumfacing == EnumFacing.SOUTH && flag1 && !flag)
+			{
+				enumfacing = EnumFacing.NORTH;
+			}
+			else
+			{
+				boolean flag2 = worldIn.getBlockState(pos.west()).isFullBlock();
+				boolean flag3 = worldIn.getBlockState(pos.east()).isFullBlock();
+
+				if (enumfacing == EnumFacing.WEST && flag2 && !flag3)
+				{
+					enumfacing = EnumFacing.EAST;
+				}
+				else if (enumfacing == EnumFacing.EAST && flag3 && !flag2)
+				{
+					enumfacing = EnumFacing.WEST;
+				}
+			}
+
+			worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing));
+		}
+	}
+
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
