@@ -7,10 +7,8 @@ import com.google.common.collect.Lists;
 import com.toastertim.spikemod.SpikeMod;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +33,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 
 public class BlockSpike extends Block {
 
-	public static final PropertyDirection FACING = BlockDirectional.FACING;
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	private final SpikeTypes type;
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
@@ -50,6 +48,10 @@ public class BlockSpike extends Block {
 		setRegistryName(type.getName());
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
+
+		//necessary for rotation working properly
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
+
 	}
 
 	@Override
@@ -77,93 +79,48 @@ public class BlockSpike extends Block {
 		}
 	}
 
-	/**** Begin code to figure out rotation****/
+
+	/**
+	 *
+	 * BlockState Rotation Code. (Yay!)
+	 *
+	 * So here's what a learned in this excrutiating learning experience: lifting code from minecraft blocks is the worst way to learn
+	 * Some of the stuff i learned from the minecraft code was carried over, but in the end, its community members where I learned the most
+	 * McJty's tutorial on multi faced blocks is where I got the final result here. Something Forge Read the Docs doesnt explicitly point out
+	 * is about getting facing a little more precisely (see getFacingFromEntity(). Also, the state/meta methods just arent really useful for
+	 * state based rotations in any of the tutorials i visited or any of the minecraft code I tried to learn from, namely the Dispenser. Some
+	 * of my problems was not knowing which directions to rotate on the x and y axes, and what degrees to get what i wanted, but now I kinda
+	 * know what I'm looking for it seems.
+	 *
+	 * This has been a long two days, I'm leavning this comment here for anyone in the future who gets as hella confused as I did. Enjoy!
+	 *
+	 */
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(pos, placer)), 2);
+	}
+
+	public static EnumFacing getFacingFromEntity(BlockPos clickedBlock, EntityLivingBase entity){
+		return EnumFacing.getFacingFromVector(
+				(float)(entity.posX - clickedBlock.getX()),
+				(float)(entity.posY - clickedBlock.getY()),
+				(float)(entity.posZ - clickedBlock.getZ()));
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)), 2);
-		int dir = placer.getHorizontalFacing().getHorizontalIndex();
-		worldIn.setBlockState(pos, getStateFromMeta(dir), 2);
+	public IBlockState getStateFromMeta(int meta) {
+		//im still not sure what getFront(meta & 7) does, specifically the meta & 7, on an integer level
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 7));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int i = 0;
-		i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
-
-		return i;
-
-	}
-
-	//unsure what to put in this one
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 7));
-	}
-
-
-	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-		super.onBlockAdded(worldIn, pos, state);
-		this.setDefaultDirection(worldIn, pos, state);
-	}
-
-	private void setDefaultDirection(World worldIn, BlockPos pos, IBlockState state){
-		if (!worldIn.isRemote){
-			EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
-			boolean flag = worldIn.getBlockState(pos.north()).isFullBlock();
-			boolean flag1 = worldIn.getBlockState(pos.south()).isFullBlock();
-
-			if (enumfacing == EnumFacing.NORTH && flag && !flag1)
-			{
-				enumfacing = EnumFacing.SOUTH;
-			}
-			else if (enumfacing == EnumFacing.SOUTH && flag1 && !flag)
-			{
-				enumfacing = EnumFacing.NORTH;
-			}
-			else
-			{
-				boolean flag2 = worldIn.getBlockState(pos.west()).isFullBlock();
-				boolean flag3 = worldIn.getBlockState(pos.east()).isFullBlock();
-
-				if (enumfacing == EnumFacing.WEST && flag2 && !flag3)
-				{
-					enumfacing = EnumFacing.EAST;
-				}
-				else if (enumfacing == EnumFacing.EAST && flag3 && !flag2)
-				{
-					enumfacing = EnumFacing.WEST;
-				}
-			}
-
-			worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing));
-		}
-	}
-
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
-
-	@Override
-	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
-	}
-
-	@Override
-	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+		return state.getValue(FACING).getIndex();
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING});
+		return new BlockStateContainer(this, FACING);
 	}
 
 	/*** End rotation code***/

@@ -10,11 +10,13 @@
   "variants": {
     "inventory": [{}],
     "normal": [{}],
-    "facing=up": {"model": "spikemod:spike" },
-    "facing=down": {"model": "spikemod.spike", "z": 180 },
-    "facing=north": { "model": "spikemod:spike", "z": 90 },
-    "facing=east": { "model": "spikemod:spike", "z": 90 },
-    "facing=south": { "model": "spikemod:spike", "z": 180 },
-    "facing=west": { "model": "spikemod:spike", "z": -90 }
+    "facing": {
+      "down":{"x": 180},
+      "up": {},
+      "north": {"x": 90},
+      "south": {"x": 90, "y": 180},
+      "west": {"x": 90, "y": 270},
+      "east": {"x": 90, "y": 90}
+    }
   }
 }
