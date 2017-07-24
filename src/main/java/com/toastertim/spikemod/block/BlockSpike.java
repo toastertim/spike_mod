@@ -31,9 +31,22 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
+import javax.annotation.Nullable;
+
 public class BlockSpike extends Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
+	//trying to use AABB to do onEntityCollided, unsure yet if there's a better way to do this?
+	protected static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0, 0, 0, 16, 16, 2);
+	protected static final AxisAlignedBB AABB_LAYER1 = new AxisAlignedBB(1, 1, 2, 15, 15, 4);
+	protected static final AxisAlignedBB AABB_LAYER2 = new AxisAlignedBB(2, 2, 4, 14, 14, 6);
+	protected static final AxisAlignedBB AABB_LAYER3 = new AxisAlignedBB(3, 3, 6, 13, 13, 8);
+	protected static final AxisAlignedBB AABB_LAYER4 = new AxisAlignedBB(4, 4, 8, 12, 12, 10);
+	protected static final AxisAlignedBB AABB_LAYER5 = new AxisAlignedBB(5, 5, 10, 11, 11, 12);
+	protected static final AxisAlignedBB AABB_LAYER6 = new AxisAlignedBB(6, 6, 12, 10, 10, 14);
+	protected static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(7, 7, 14, 9, 9, 16);
+
 	private final SpikeTypes type;
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
@@ -79,6 +92,65 @@ public class BlockSpike extends Block {
 		}
 	}
 
+
+
+
+	/**
+	 * Learning to change from onEntityWalk to onEntityCollidedWithBlock
+	 *
+	 * Lesson 1: Tried to addCollisionBoxToList like a cauldron, that did fucky things. Don't try this at home
+	 * This probably has something to do with the RayTrace stuff going on farther down in this class, stuff I did not
+	 * add and thus do not have understanding of.
+	 *
+	 * Lesson 2: Let's try the getCollisionBoundingBox call used in a cactus, but use FULL_BLOCK_AABB instead of customs. This
+	 * has not been enough to trigger onEntityCollidedWithBlock damage
+	 *
+	 * Lesson 3: Let's just try getBoundingBox from the Cauldron code. The problem here is probably some combination of these
+	 * or other code I don't know.
+	 *
+	 * Will have to search for more tutorials about this that are up to date for 1.10+. Until then, this code will remain
+	 * commented out so that the spikes still function
+	 *
+	 */
+
+	//Lesson 2: didn't work
+	/*@Nullable
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return FULL_BLOCK_AABB;
+	}*/
+
+	//Lesson 3 also didnt work
+	/*@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return FULL_BLOCK_AABB;
+	}*/
+
+
+	/*@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if (!world.isRemote) {
+			if (type.equals(SpikeTypes.FREEZING) && (entity instanceof EntityLivingBase)) {
+				((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
+			} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE)  && (entity instanceof EntityLivingBase)) {
+				((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(20), 200, 1));
+				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+			} else if (type.equals(SpikeTypes.HOTSPIKE) && (entity instanceof EntityLivingBase)) {
+				((EntityLivingBase) entity).setFire(5);
+				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+			} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
+				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
+			} else if (type.getKillsEntity() == false) {
+				if (((EntityLivingBase) entity).getHealth() > type.getDamage()) {
+					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+				} else if (((EntityLivingBase) entity).getHealth() > 1F && ((EntityLivingBase) entity).getHealth() <= type.getDamage()) {
+					entity.attackEntityFrom(DamageSource.CACTUS, 1F);
+				}
+			} else entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+
+		}
+	}*/
 
 	/**
 	 *
