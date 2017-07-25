@@ -23,9 +23,9 @@ public class SpikeBlocks {
 	public static final Block ironSpike = new BlockSpike(SpikeTypes.IRON, Material.IRON, SoundType.METAL);
 	public static final Block goldSpike = new BlockSpike(SpikeTypes.GOLD, Material.IRON, SoundType.METAL);
 	public static final Block diamondSpike = new BlockSpike(SpikeTypes.DIAMOND, Material.IRON, SoundType.METAL);
-	public static final Block freezingSpike = new BlockSpike(SpikeTypes.FREEZING, Material.ICE, SoundType.STONE);
-	public static final Block extraSharpSpike = new BlockSpike(SpikeTypes.EXTRASHARPSPIKE, Material.ROCK, SoundType.STONE);
-	public static final Block hotSpike = new BlockSpike(SpikeTypes.HOTSPIKE, Material.IRON, SoundType.METAL);
+	public static final Block freezingSpike = new BlockIceSpike();
+	public static final Block extraSharpSpike = new BlockWitherSpike();
+	public static final Block hotSpike = new BlockFireSpike();
 	public static final Block lootingSpike = new LootingSpike();
 
 	@SubscribeEvent
