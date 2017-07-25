@@ -41,6 +41,8 @@ public class BlockSpike extends Block {
 	private static final double px = 0.0625D; // 1/16, the value of a pixel of space. S: Moved this up here.  Can use this for other AABB stuff anyhow.
 	
 	//Right.  There's no built-in helper method to rotate these...  *oh boy*
+	//So, the way AABB's work is they are from 0 to 1, that's for a whole block space.  The double "px" is defined to make creating them easier.
+	//I have no motivation to make these, but once these box lists are defined, the AABB's for the rotated faces will work again.
 	private static final ImmutableList<AxisAlignedBB> UP = ImmutableList.of(
 			new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), 
 			new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), 
@@ -50,15 +52,7 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), 
 			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), 
 			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
-	private static final ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(
-			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7),
-			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6),
-			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5),
-			new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4),
-			new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3),
-			new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2),
-			new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px),
-			new AxisAlignedBB(0, 0, 0, 1, px * 2, 1));
+	private static final ImmutableList<AxisAlignedBB> DOWN = UP;
 	private static final ImmutableList<AxisAlignedBB> NORTH = UP;
 	private static final ImmutableList<AxisAlignedBB> SOUTH = UP;
 	private static final ImmutableList<AxisAlignedBB> WEST = UP;
