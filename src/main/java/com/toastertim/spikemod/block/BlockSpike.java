@@ -2,6 +2,8 @@ package com.toastertim.spikemod.block;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.toastertim.spikemod.SpikeMod;
@@ -17,10 +19,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,23 +31,55 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 
-import javax.annotation.Nullable;
-
 public class BlockSpike extends Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	//trying to use AABB to do onEntityCollided, unsure yet if there's a better way to do this?
-	protected static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0, 0, 0, 16, 16, 2);
+	//trying to use AABB to do onEntityCollided, unsure yet if there's a better way to do this? S: All of these are invalid, as the single block AABB is from (0,0,0) to (1,1,1), instead of (0,0,0) to (16,16,16).
+	/*protected static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0, 0, 0, 16, 16, 2);
 	protected static final AxisAlignedBB AABB_LAYER1 = new AxisAlignedBB(1, 1, 2, 15, 15, 4);
 	protected static final AxisAlignedBB AABB_LAYER2 = new AxisAlignedBB(2, 2, 4, 14, 14, 6);
 	protected static final AxisAlignedBB AABB_LAYER3 = new AxisAlignedBB(3, 3, 6, 13, 13, 8);
 	protected static final AxisAlignedBB AABB_LAYER4 = new AxisAlignedBB(4, 4, 8, 12, 12, 10);
 	protected static final AxisAlignedBB AABB_LAYER5 = new AxisAlignedBB(5, 5, 10, 11, 11, 12);
 	protected static final AxisAlignedBB AABB_LAYER6 = new AxisAlignedBB(6, 6, 12, 10, 10, 14);
-	protected static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(7, 7, 14, 9, 9, 16);
+	protected static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(7, 7, 14, 9, 9, 16);*/
+	
+	private static final double px = 0.0625D; // 1/16, the value of a pixel of space. S: Moved this up here.  Can use this for other AABB stuff anyhow.
 
-	private final SpikeTypes type;
+	
+	//Right.  There's no built-in helper method to rotate these...  *oh boy*
+	private static ImmutableList<AxisAlignedBB> UP = ImmutableList.of(new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), 
+			new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), 
+			new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2), 
+			new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3), 
+			new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4), 
+			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), 
+			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), 
+			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
+	private static ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(UP.get(6), UP.get(5), UP.get(4), UP.get(3), UP.get(2), UP.get(1), UP.get(0));
+	private static ImmutableList<AxisAlignedBB> NORTH = ImmutableList.of(rotate(UP.get(6), Axis.Z), rotate(UP.get(5), Axis.Z), rotate(UP.get(4), Axis.Z), rotate(UP.get(3), Axis.Z), rotate(UP.get(2), Axis.Z), rotate(UP.get(1), Axis.Z), rotate(UP.get(0), Axis.Z));
+	private static ImmutableList<AxisAlignedBB> SOUTH = UP;
+	private static ImmutableList<AxisAlignedBB> WEST = UP;
+	private static ImmutableList<AxisAlignedBB> EAST = UP;
+	private static ImmutableList<ImmutableList<AxisAlignedBB>> BOXES = ImmutableList.of(DOWN, UP, NORTH, SOUTH, WEST, EAST);
+	
+	private static List<AxisAlignedBB> getBoxesFromState(IBlockState state){
+		return BOXES.get(state.getValue(FACING).ordinal());
+	}
+	
+	public static AxisAlignedBB rotate(AxisAlignedBB oldBB, Axis axis)
+	{
+		AxisAlignedBB newBB = null;
+	 switch (axis) {
+	 case X : newBB = new AxisAlignedBB(oldBB.minZ, oldBB.minY, oldBB.maxX * -1, oldBB.maxZ, oldBB.maxY, oldBB.minX * -1);
+	 case Y : newBB = new AxisAlignedBB(oldBB.maxX * -1, oldBB.minY, oldBB.maxZ * -1, oldBB.minX * -1, oldBB.maxY, oldBB.minZ * -1);
+	 case Z : newBB = new AxisAlignedBB(oldBB.maxZ * -1, oldBB.minY, oldBB.minX, oldBB.minZ * -1, oldBB.maxY, oldBB.maxX);
+	 }
+	 return newBB;
+	}
+	
+	protected final SpikeTypes type;
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
 		super(m);
@@ -62,37 +94,38 @@ public class BlockSpike extends Block {
 		SpikeBlocks.BLOCKS.add(this);
 		SpikeBlocks.ITEMS.add(new ItemBlock(this).setRegistryName(getRegistryName()));
 
-		//necessary for rotation working properly
-		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
+		//necessary for rotation working properly S: Changed to EnumFacing.UP so old spikes don't flip.
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
 
+	}
+	
+	public SpikeTypes getType(){
+		return type;
 	}
 
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
-		if (!world.isRemote) {
-				if (type.equals(SpikeTypes.FREEZING) && (entity instanceof EntityLivingBase)) {
-					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
-				} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE)  && (entity instanceof EntityLivingBase)) {
-					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(20), 200, 1));
-					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-				} else if (type.equals(SpikeTypes.HOTSPIKE) && (entity instanceof EntityLivingBase)) {
-					((EntityLivingBase) entity).setFire(5);
-					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-				} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
-					FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
-					entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
-				} else if (type.getKillsEntity() == false) {
-					if (((EntityLivingBase) entity).getHealth() > type.getDamage()) {
-						entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-					} else if (((EntityLivingBase) entity).getHealth() > 1F && ((EntityLivingBase) entity).getHealth() <= type.getDamage()) {
-						entity.attackEntityFrom(DamageSource.CACTUS, 1F);
-					}
-				} else entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-
-		}
+		if (!world.isRemote && entity instanceof EntityLivingBase) handleSpikeDamage(world, pos, (EntityLivingBase) entity);
 	}
-
-
+	
+	public void handleSpikeDamage(World world, BlockPos pos, EntityLivingBase entity){
+		if (type.usesPlayer() && !(entity instanceof EntityPlayer)) {
+			FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
+			entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
+		} else if (type.getKillsEntity() == false) {
+			if (entity.getHealth() > type.getDamage()) {
+				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+			} else if (entity.getHealth() > 1F) {
+				entity.attackEntityFrom(DamageSource.CACTUS, 1F);
+			}
+		} else entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
+	}
+	
+	@Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    {
+        return this.getDefaultState().withProperty(FACING, facing);
+    }
 
 
 	/**
@@ -114,43 +147,24 @@ public class BlockSpike extends Block {
 	 */
 
 	//Lesson 2: didn't work
-	/*@Nullable
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return FULL_BLOCK_AABB;
-	}*/
+		return NULL_AABB;
+	}
+	
+	@Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> list, @Nullable Entity entityIn, boolean p_185477_7_)
+    {
+        for(AxisAlignedBB bb : getBoxesFromState(state)){
+        	addCollisionBoxToList(pos, entityBox, list, bb);
+        }
+    }
 
-	//Lesson 3 also didnt work
-	/*@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return FULL_BLOCK_AABB;
-	}*/
 
-
-	/*@Override
+	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (!world.isRemote) {
-			if (type.equals(SpikeTypes.FREEZING) && (entity instanceof EntityLivingBase)) {
-				((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), 200, 5));
-			} else if (type.equals(SpikeTypes.EXTRASHARPSPIKE)  && (entity instanceof EntityLivingBase)) {
-				((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(20), 200, 1));
-				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-			} else if (type.equals(SpikeTypes.HOTSPIKE) && (entity instanceof EntityLivingBase)) {
-				((EntityLivingBase) entity).setFire(5);
-				entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-			} else if (type.usesPlayer() && entity instanceof EntityLivingBase && !(entity instanceof EntityPlayer)) {
-				FakePlayer player = FakePlayerFactory.getMinecraft((WorldServer) world);
-				entity.attackEntityFrom(DamageSource.causePlayerDamage(player), type.getDamage());
-			} else if (type.getKillsEntity() == false) {
-				if (((EntityLivingBase) entity).getHealth() > type.getDamage()) {
-					entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-				} else if (((EntityLivingBase) entity).getHealth() > 1F && ((EntityLivingBase) entity).getHealth() <= type.getDamage()) {
-					entity.attackEntityFrom(DamageSource.CACTUS, 1F);
-				}
-			} else entity.attackEntityFrom(DamageSource.CACTUS, type.getDamage());
-
-		}
-	}*/
+		this.onEntityWalk(world, pos, entity);
+	}
 
 	/**
 	 *
@@ -167,27 +181,23 @@ public class BlockSpike extends Block {
 	 * This has been a long two days, I'm leavning this comment here for anyone in the future who gets as hella confused as I did. Enjoy!
 	 *
 	 */
-	@Override
+	/*
+	@Override //S: The one issue with doing this here, is that this shouldn't be here.  There's a better method for this.
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(pos, placer)), 2);
-	}
-
-	public static EnumFacing getFacingFromEntity(BlockPos clickedBlock, EntityLivingBase entity){
-		return EnumFacing.getFacingFromVector(
-				(float)(entity.posX - clickedBlock.getX()),
-				(float)(entity.posY - clickedBlock.getY()),
-				(float)(entity.posZ - clickedBlock.getZ()));
-	}
+	}*/
+	
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		//im still not sure what getFront(meta & 7) does, specifically the meta & 7, on an integer level
-		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta & 7));
+		//im still not sure what getFront(meta & 7) does, specifically the meta & 7, on an integer level S: That's bitshifting math.  I'm not too clear on it either, but it works well for serialization.
+		//But since we only have one property, we can just do this.
+		return getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
+		return state.getValue(FACING).ordinal();
 	}
 
 	@Override
@@ -217,17 +227,13 @@ public class BlockSpike extends Block {
 		return false;
 	}
 
-	private static final double px = 0.0625D; // 1/16, the value of a pixel of space.
-
-	private static ImmutableList<AxisAlignedBB> SPIKE_BOUNDS = ImmutableList.of(new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2), new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3), new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4), new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
-
 	//Everything below this line is copypasted from Tinker's Construct. Thx TiC!
 
 	@Override
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+	public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end) {
 		// basically the same BlockStairs does
 		// Raytrace through all AABBs (plate, legs) and return the nearest one
-		return raytraceMultiAABB(SPIKE_BOUNDS, pos, start, end);
+		return raytraceMultiAABB(getBoxesFromState(state), pos, start, end);
 	}
 
 	public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
