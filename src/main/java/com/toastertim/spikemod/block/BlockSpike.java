@@ -58,25 +58,14 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), 
 			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
 	private static ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(UP.get(6), UP.get(5), UP.get(4), UP.get(3), UP.get(2), UP.get(1), UP.get(0));
-	private static ImmutableList<AxisAlignedBB> NORTH = ImmutableList.of(rotate(UP.get(6), Axis.Z), rotate(UP.get(5), Axis.Z), rotate(UP.get(4), Axis.Z), rotate(UP.get(3), Axis.Z), rotate(UP.get(2), Axis.Z), rotate(UP.get(1), Axis.Z), rotate(UP.get(0), Axis.Z));
+	private static ImmutableList<AxisAlignedBB> NORTH = UP;
 	private static ImmutableList<AxisAlignedBB> SOUTH = UP;
 	private static ImmutableList<AxisAlignedBB> WEST = UP;
 	private static ImmutableList<AxisAlignedBB> EAST = UP;
 	private static ImmutableList<ImmutableList<AxisAlignedBB>> BOXES = ImmutableList.of(DOWN, UP, NORTH, SOUTH, WEST, EAST);
 	
-	private static List<AxisAlignedBB> getBoxesFromState(IBlockState state){
+	private static ImmutableList<AxisAlignedBB> getBoxesFromState(IBlockState state){
 		return BOXES.get(state.getValue(FACING).ordinal());
-	}
-	
-	public static AxisAlignedBB rotate(AxisAlignedBB oldBB, Axis axis)
-	{
-		AxisAlignedBB newBB = null;
-	 switch (axis) {
-	 case X : newBB = new AxisAlignedBB(oldBB.minZ, oldBB.minY, oldBB.maxX * -1, oldBB.maxZ, oldBB.maxY, oldBB.minX * -1);
-	 case Y : newBB = new AxisAlignedBB(oldBB.maxX * -1, oldBB.minY, oldBB.maxZ * -1, oldBB.minX * -1, oldBB.maxY, oldBB.minZ * -1);
-	 case Z : newBB = new AxisAlignedBB(oldBB.maxZ * -1, oldBB.minY, oldBB.minX, oldBB.minZ * -1, oldBB.maxY, oldBB.maxX);
-	 }
-	 return newBB;
 	}
 	
 	protected final SpikeTypes type;
