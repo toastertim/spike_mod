@@ -1,5 +1,6 @@
 package com.toastertim.spikemod.block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -20,7 +21,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.*;
-import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -35,21 +35,14 @@ public class BlockSpike extends Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	//trying to use AABB to do onEntityCollided, unsure yet if there's a better way to do this? S: All of these are invalid, as the single block AABB is from (0,0,0) to (1,1,1), instead of (0,0,0) to (16,16,16).
-	/*protected static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0, 0, 0, 16, 16, 2);
-	protected static final AxisAlignedBB AABB_LAYER1 = new AxisAlignedBB(1, 1, 2, 15, 15, 4);
-	protected static final AxisAlignedBB AABB_LAYER2 = new AxisAlignedBB(2, 2, 4, 14, 14, 6);
-	protected static final AxisAlignedBB AABB_LAYER3 = new AxisAlignedBB(3, 3, 6, 13, 13, 8);
-	protected static final AxisAlignedBB AABB_LAYER4 = new AxisAlignedBB(4, 4, 8, 12, 12, 10);
-	protected static final AxisAlignedBB AABB_LAYER5 = new AxisAlignedBB(5, 5, 10, 11, 11, 12);
-	protected static final AxisAlignedBB AABB_LAYER6 = new AxisAlignedBB(6, 6, 12, 10, 10, 14);
-	protected static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(7, 7, 14, 9, 9, 16);*/
+	
+	
 	
 	private static final double px = 0.0625D; // 1/16, the value of a pixel of space. S: Moved this up here.  Can use this for other AABB stuff anyhow.
-
 	
 	//Right.  There's no built-in helper method to rotate these...  *oh boy*
-	private static ImmutableList<AxisAlignedBB> UP = ImmutableList.of(new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), 
+	private static final ImmutableList<AxisAlignedBB> UP = ImmutableList.of(
+			new AxisAlignedBB(0, 0, 0, 1, px * 2, 1), 
 			new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px), 
 			new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2), 
 			new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3), 
@@ -57,14 +50,33 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), 
 			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), 
 			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
-	private static ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(UP.get(6), UP.get(5), UP.get(4), UP.get(3), UP.get(2), UP.get(1), UP.get(0));
-	private static ImmutableList<AxisAlignedBB> NORTH = UP;
-	private static ImmutableList<AxisAlignedBB> SOUTH = UP;
-	private static ImmutableList<AxisAlignedBB> WEST = UP;
-	private static ImmutableList<AxisAlignedBB> EAST = UP;
-	private static ImmutableList<ImmutableList<AxisAlignedBB>> BOXES = ImmutableList.of(DOWN, UP, NORTH, SOUTH, WEST, EAST);
+	private static final ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(
+			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7),
+			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6),
+			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5),
+			new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4),
+			new AxisAlignedBB(px * 3, px * 6, px * 3, 1 - px * 3, px * 8, 1 - px * 3),
+			new AxisAlignedBB(px * 2, px * 4, px * 2, 1 - px * 2, px * 6, 1 - px * 2),
+			new AxisAlignedBB(px, px * 2, px, 1 - px, px * 4, 1 - px),
+			new AxisAlignedBB(0, 0, 0, 1, px * 2, 1));
+	private static final ImmutableList<AxisAlignedBB> NORTH = UP;
+	private static final ImmutableList<AxisAlignedBB> SOUTH = UP;
+	private static final ImmutableList<AxisAlignedBB> WEST = UP;
+	private static final ImmutableList<AxisAlignedBB> EAST = UP;
+	private static final List<ImmutableList<AxisAlignedBB>> BOXES = new ArrayList<ImmutableList<AxisAlignedBB>>();
+	
+	static {
+		BOXES.add(DOWN);
+		BOXES.add(UP);
+		BOXES.add(NORTH);
+		BOXES.add(SOUTH);
+		BOXES.add(WEST);
+		BOXES.add(EAST);
+	}
 	
 	private static ImmutableList<AxisAlignedBB> getBoxesFromState(IBlockState state){
+		System.out.println("Attempting to get box list for state with facing " + state.getValue(FACING) + " and it has ordinal " + state.getValue(FACING).ordinal());
+		System.out.println("This has returned box list " + BOXES.get(state.getValue(FACING).ordinal()).toString());
 		return BOXES.get(state.getValue(FACING).ordinal());
 	}
 	
