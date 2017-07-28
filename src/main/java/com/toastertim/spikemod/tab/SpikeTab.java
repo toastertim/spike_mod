@@ -16,6 +16,6 @@ public class SpikeTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(SpikeBlocks.diamondSpike);
+		return new ItemStack(SpikeBlocks.DIAMOND_SPIKE);
 	}
 }

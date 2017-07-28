@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 public class BlockWitherSpike extends BlockSpike{
 
 	public BlockWitherSpike() {
-		super(SpikeTypes.EXTRASHARPSPIKE, Material.ROCK, SoundType.STONE);
+		super(SpikeTypes.WITHERING, Material.SAND, SoundType.SAND);
 	}
 
 	@Override

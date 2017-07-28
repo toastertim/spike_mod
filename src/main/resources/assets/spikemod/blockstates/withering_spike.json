@@ -3,7 +3,7 @@
   "defaults": {
     "model": "spikemod:spike",
     "textures": {
-      "down": "spikemod:blocks/extra_sharp_spike"
+      "down": "blocks/soul_sand"
     },
     "transform": "forge:default-block"
   },
