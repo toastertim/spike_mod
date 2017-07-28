@@ -18,15 +18,15 @@ public class SpikeBlocks {
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 
-	public static final Block woodenSpike = new BlockSpike(SpikeTypes.WOODEN, Material.WOOD, SoundType.WOOD);
-	public static final Block stoneSpike = new BlockSpike(SpikeTypes.STONE, Material.ROCK, SoundType.STONE);
-	public static final Block ironSpike = new BlockSpike(SpikeTypes.IRON, Material.IRON, SoundType.METAL);
-	public static final Block goldSpike = new BlockSpike(SpikeTypes.GOLD, Material.IRON, SoundType.METAL);
-	public static final Block diamondSpike = new BlockSpike(SpikeTypes.DIAMOND, Material.IRON, SoundType.METAL);
-	public static final Block freezingSpike = new BlockIceSpike();
-	public static final Block extraSharpSpike = new BlockWitherSpike();
-	public static final Block hotSpike = new BlockFireSpike();
-	public static final Block lootingSpike = new LootingSpike();
+	public static final Block WOOD_SPIKE = new BlockSpike(SpikeTypes.WOODEN, Material.WOOD, SoundType.WOOD);
+	public static final Block STONE_SPIKE = new BlockSpike(SpikeTypes.STONE, Material.ROCK, SoundType.STONE);
+	public static final Block IRON_SPIKE = new BlockSpike(SpikeTypes.IRON, Material.IRON, SoundType.METAL);
+	public static final Block GOLD_SPIKE = new BlockSpike(SpikeTypes.GOLD, Material.IRON, SoundType.METAL);
+	public static final Block DIAMOND_SPIKE = new BlockSpike(SpikeTypes.DIAMOND, Material.IRON, SoundType.METAL);
+	public static final Block FREEZING_SPIKE = new BlockIceSpike();
+	public static final Block WITHERING_SPIKE = new BlockWitherSpike();
+	public static final Block FLAMING_SPIKE = new BlockFireSpike();
+	public static final Block LOOTING_SPIKE = new LootingSpike();
 
 	@SubscribeEvent
 	public static void onBlockRegister(Register<Block> e) {

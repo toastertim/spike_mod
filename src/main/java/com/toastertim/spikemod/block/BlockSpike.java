@@ -53,9 +53,9 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 4, px * 8, px * 4, 1 - px * 4, px * 10, 1 - px * 4), 
 			new AxisAlignedBB(px * 5, px * 10, px * 5, 1 - px * 5, px * 12, 1 - px * 5), 
 			new AxisAlignedBB(px * 6, px * 12, px * 6, 1 - px * 6, px * 14, 1 - px * 6), 
-			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 16, 1 - px * 7));
+			new AxisAlignedBB(px * 7, px * 14, px * 7, 1 - px * 7, px * 15.95D, 1 - px * 7));
 	private static final ImmutableList<AxisAlignedBB> DOWN = ImmutableList.of(
-			new AxisAlignedBB(px * 7, 0, px * 7, 1 - px * 7, px * 2, 1 - px * 7),
+			new AxisAlignedBB(px * 7, 0.05D, px * 7, 1 - px * 7, px * 2, 1 - px * 7),
 			new AxisAlignedBB(px * 6, px * 2, px * 6, 1 - px * 6, px * 4, 1 - px * 6),
 			new AxisAlignedBB(px * 5, px * 4, px * 5, 1 - px * 5, px * 6, 1 - px * 5),
 			new AxisAlignedBB(px * 4, px * 6, px * 4, 1 - px * 4, px * 8, 1 - px * 4),
@@ -64,14 +64,15 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px, px * 12, px, 1 - px, px * 14, 1 - px),
 			new AxisAlignedBB(0, px * 14, 0, 1, px * 16, 1));
 	private static final ImmutableList<AxisAlignedBB> NORTH = ImmutableList.of(
-			new AxisAlignedBB(px * 7, px * 7, px * 14, 1 - px * 7, 1 -  px * 7, px * 16),
-			new AxisAlignedBB(px * 6, px * 6, px * 12, 1 - px * 6, 1 -  px * 6, px * 14),
-			new AxisAlignedBB(px * 5, px * 5, px * 10, 1 - px * 5, 1 -  px * 5, px * 12),
-			new AxisAlignedBB(px * 4, px * 4, px * 8, 1 - px * 4, 1 -  px * 4, px * 10),
-			new AxisAlignedBB(px * 3, px * 3, px * 6, 1 - px * 3, 1 -  px * 3, px * 8),
-			new AxisAlignedBB(px * 2, px * 2, px * 4, 1 - px * 2, 1 -  px * 2, px * 6),
-			new AxisAlignedBB(px, px, px * 2, 1 - px, 1- px, px * 4),
-			new AxisAlignedBB(0, 0, 0, 1, 1, px * 2));
+			new AxisAlignedBB(0, 0, 1, 1, 1, 1 - px * 2),
+			new AxisAlignedBB(px * 1, px * 1, 1 - px * 2, 1 - px * 1, 1 - px * 1, 1 - px * 4),
+			new AxisAlignedBB(px * 2, px * 2, 1 - px * 4, 1 - px * 2, 1 - px * 2, 1 - px * 6),
+			new AxisAlignedBB(px * 3, px * 3, 1 - px * 6, 1 - px * 3, 1 - px * 3, 1 - px * 8),
+			new AxisAlignedBB(px * 4, px * 4, 1 - px * 8, 1 - px * 4, 1 - px * 4, 1 - px * 10),
+			new AxisAlignedBB(px * 5, px * 5, 1 - px * 10, 1 - px * 5, 1 - px * 5, 1 - px * 12),
+			new AxisAlignedBB(px * 6, px * 6, 1 - px * 12, 1 - px * 6, 1 - px * 6, 1 - px * 14),
+			new AxisAlignedBB(px * 7, px * 7, 1 - px * 14, 1 - px * 7, 1 - px * 7, 1 - px * 15.95D)
+		);
 	private static final ImmutableList<AxisAlignedBB> SOUTH = ImmutableList.of(
 			new AxisAlignedBB(0, 0, 0, 1, 1, px * 2),
 			new AxisAlignedBB(px, px, px * 2, 1 - px, 1- px, px * 4),
@@ -80,9 +81,9 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 4, px * 4, px * 8, 1 - px * 4, 1 -  px * 4, px * 10),
 			new AxisAlignedBB(px * 5, px * 5, px * 10, 1 - px * 5, 1 -  px * 5, px * 12),
 			new AxisAlignedBB(px * 6, px * 6, px * 12, 1 - px * 6, 1 -  px * 6, px * 14),
-			new AxisAlignedBB(px * 7, px * 7, px * 14, 1 - px * 7, 1 -  px * 7, px * 16));
+			new AxisAlignedBB(px * 7, px * 7, px * 14, 1 - px * 7, 1 -  px * 7, px * 15.95D));
 	private static final ImmutableList<AxisAlignedBB> WEST = ImmutableList.of(
-			new AxisAlignedBB(0, px * 7, px * 7, px * 2, 1 - px * 7, 1 - px * 7),
+			new AxisAlignedBB(0.05D, px * 7, px * 7, px * 2, 1 - px * 7, 1 - px * 7),
 			new AxisAlignedBB(px * 2, px * 6, px * 6, px * 4, 1 - px * 6, 1 - px * 6),
 			new AxisAlignedBB(px * 4, px * 5, px * 5, px * 6, 1 - px * 5, 1 - px * 5),
 			new AxisAlignedBB(px * 6, px * 4, px * 4, px * 8, 1 - px * 4, 1 - px * 4),
@@ -98,7 +99,7 @@ public class BlockSpike extends Block {
 			new AxisAlignedBB(px * 8, px * 4, px * 4, px * 10, 1 - px * 4, 1 - px * 4),
 			new AxisAlignedBB(px * 10, px * 5, px * 5, px * 12, 1 - px * 5, 1 - px * 5),
 			new AxisAlignedBB(px * 12, px * 6, px * 6, px * 14, 1 - px * 6, 1 - px * 6),
-			new AxisAlignedBB(px * 14, px * 7, px * 7, px * 16, 1 - px * 7, 1 - px * 7));
+			new AxisAlignedBB(px * 14, px * 7, px * 7, px * 15.95D, 1 - px * 7, 1 - px * 7));
 	private static final List<ImmutableList<AxisAlignedBB>> BOXES = new ArrayList<ImmutableList<AxisAlignedBB>>();
 	
 	static {
@@ -118,7 +119,7 @@ public class BlockSpike extends Block {
 
 	public BlockSpike(SpikeTypes type, Material m, SoundType s) {
 		super(m);
-		this.setUnlocalizedName(type.getName());
+		this.setUnlocalizedName(SpikeMod.MODID + "." + type.getName());
 		this.setCreativeTab(SpikeMod.SPIKE_TAB);
 		this.setHardness(1F);
 		this.setResistance(1F);
@@ -136,11 +137,6 @@ public class BlockSpike extends Block {
 	
 	public SpikeTypes getType(){
 		return type;
-	}
-
-	@Override
-	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
-		if (!world.isRemote && entity instanceof EntityLivingBase) handleSpikeDamage(world, pos, (EntityLivingBase) entity);
 	}
 	
 	public void handleSpikeDamage(World world, BlockPos pos, EntityLivingBase entity){
@@ -198,7 +194,7 @@ public class BlockSpike extends Block {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		this.onEntityWalk(world, pos, entity);
+		if (!world.isRemote && entity instanceof EntityLivingBase) handleSpikeDamage(world, pos, (EntityLivingBase) entity);
 	}
 
 	/**

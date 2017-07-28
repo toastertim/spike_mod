@@ -10,13 +10,15 @@ import net.minecraft.world.World;
 public class BlockFireSpike extends BlockSpike{
 
 	public BlockFireSpike() {
-		super(SpikeTypes.HOTSPIKE, Material.IRON, SoundType.METAL);
+		super(SpikeTypes.FLAMING, Material.IRON, SoundType.METAL);
 	}
 	
 	@Override
 	public void handleSpikeDamage(World world, BlockPos pos, EntityLivingBase entity){
 		entity.setFire(5);
-		entity.attackEntityFrom(DamageSource.HOT_FLOOR, type.getDamage());
+		entity.attackEntityFrom(DamageSource.IN_FIRE, type.getDamage());
 	}
+	
+	//S: Honestly, not sure the magma draws well on the spike model. Texture here might need work, but I'm no artist.
 
 }
