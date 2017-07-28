@@ -54,7 +54,7 @@ public class Config {
 			cfg.save();
 		}
 
-		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, freezingDamage, witheringDamage, flamingDamage, lootingDamage };
+		damages = new float[] { woodenDamage, stoneDamage, ironDamage, goldDamage, diamondDamage, freezingDamage, witheringDamage, flamingDamage, 1, lootingDamage };
 		SpikeTypes.readConfig();
 	}
 

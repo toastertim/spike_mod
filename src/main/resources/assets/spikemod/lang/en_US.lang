@@ -15,3 +15,6 @@ tile.spikemod.looting_spike.name=Looting Spike
 tile.spikemod.freezing_spike.name=Freezing Spike
 tile.spikemod.withering_spike.name=Withering Spike
 tile.spikemod.hot_spike.name=Flaming Spike
+tile.spikemod.bleeding_spike.name=Bleeding Spike
+
+effect.spikemod.bleeding=Bleeding

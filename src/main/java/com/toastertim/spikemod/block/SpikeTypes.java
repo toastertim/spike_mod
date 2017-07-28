@@ -12,6 +12,7 @@ public enum SpikeTypes {
 	FREEZING("freezing_spike", Config.freezingDamage, false, true),
 	WITHERING("withering_spike", Config.witheringDamage, false, true),
 	FLAMING("hot_spike", Config.flamingDamage, false, true),
+	BLEEDING("bleeding_spike", 1, false, false),//Hard set to 1 during testing.  Config can be added after it actually does something
 	LOOTING("looting_spike", Config.lootingDamage, true, true);
 
 	private final String name;

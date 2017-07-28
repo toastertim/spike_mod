@@ -3,10 +3,13 @@ package com.toastertim.spikemod.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.toastertim.spikemod.potion.BleedingPotion;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,6 +29,7 @@ public class SpikeBlocks {
 	public static final Block FREEZING_SPIKE = new BlockIceSpike();
 	public static final Block WITHERING_SPIKE = new BlockWitherSpike();
 	public static final Block FLAMING_SPIKE = new BlockFireSpike();
+	public static final Block BLEEDING_SPIKE = new BlockBleedingSpike();
 	public static final Block LOOTING_SPIKE = new LootingSpike();
 
 	@SubscribeEvent
@@ -37,6 +41,13 @@ public class SpikeBlocks {
 	@SubscribeEvent
 	public static void onItemRegister(Register<Item> e) {
 		e.getRegistry().registerAll(ITEMS.toArray(new Item[0]));
+	}
+	
+	public static final Potion BLEEDING = new BleedingPotion();
+	
+	@SubscribeEvent
+	public static void onPotionRegister(Register<Potion> e) {
+		e.getRegistry().register(BLEEDING);
 	}
 
 }
